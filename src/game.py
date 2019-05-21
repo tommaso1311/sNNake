@@ -1,11 +1,4 @@
-import numpy as np
-import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
-import pygame
-import argparse
-import sys
 from snake import *
-
 
 class game:
 	"""
@@ -55,11 +48,11 @@ class game:
 		self.field = np.zeros((self.size[0], self.size[0]), dtype=int)
 
 
-	def field_update(self):
+	# def field_update(self):
 
-		self.field = np.zeros((self.size[0], self.size[0]), dtype=int)
-		for coord in self.snake.occupied:
-			self.field[coord] = 1
+	# 	self.field = np.zeros((self.size[0], self.size[0]), dtype=int)
+	# 	for coord in self.snake.occupied:
+	# 		self.field[coord] = 1
 
 
 	def play(self):

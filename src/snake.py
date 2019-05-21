@@ -64,8 +64,6 @@ class snake:
 
 		self.position = (self.y_head, self.x_head)
 
-		print(self.direction)
-
 		self.occupied.insert(0, self.position)
 		if len(self.occupied) > self.lenght:
 			del self.occupied[-1]
