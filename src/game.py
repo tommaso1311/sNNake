@@ -9,22 +9,31 @@ from snake import *
 
 class game:
 	"""
-	Main class used to play the game Snake.
+	Main class used to play the game Snake
 
 	Attributes
 	----------
-	size : list of integers
+	size : list
 		a list of integers used to represent the game window
-	background_color : tuple of integers
+	background_color : tuple
 		describes the background color of the game window
+	snake_color : tuple
+		describes the snake color in the game window
 	clock : pygame.time object
 		used to control the refresh of the game window
-	window : pygame.display
+	window : pygame.display object
+		used to represent the game
+	field : array
+		used to represent the game
 
 	Methods
 	-------
-	represent(frequency=24)
-		Depicts the game window
+	field_update()
+		updates the field array
+	play()
+		runs the game
+	represent(frequency=30)
+		depicts the game window
 	"""
 
 

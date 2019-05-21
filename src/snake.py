@@ -7,6 +7,28 @@ import sys
 import random
 
 class snake:
+	"""
+	Class used to simulate the snake
+
+	Attributes
+	----------
+	length : int
+		lenght of the snake
+	fitness : int
+		fitness of the snake
+	x_head : int
+	y_head : int
+		xy position of the snake head
+	direction : character
+		direction in which the snake is moving
+	occupied : list
+		list of coordinates occupied
+
+	Methods
+	-------
+	move()
+		gets inputs and moves the snake
+	"""
 
 	def __init__(self):
 
