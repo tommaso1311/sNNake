@@ -57,9 +57,9 @@ class snake:
 					self.direction = 'L'
 				elif event.key == pygame.K_ESCAPE: quit()
 
-		if self.direction is 'U': self.y_head -= 1
-		elif self.direction is 'R': self.x_head += 1
-		elif self.direction is 'D': self.y_head += 1
+		if self.direction == 'U': self.y_head -= 1
+		elif self.direction == 'R': self.x_head += 1
+		elif self.direction == 'D': self.y_head += 1
 		else: self.x_head -= 1
 
 		self.position = (self.y_head, self.x_head)

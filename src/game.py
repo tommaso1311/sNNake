@@ -1,4 +1,5 @@
 from snake import *
+from food import *
 
 class game:
 	"""
@@ -42,10 +43,11 @@ class game:
 		self.size = size
 		self.background_color = (202, 202, 202)
 		self.snake_color = (66, 149, 71)
+		self.food_color = (183, 43, 56)
 		self.clock = pygame.time.Clock()
 		self.window = pygame.display.set_mode((self.size[0]*self.size[1],
 											self.size[0]*self.size[1]))
-		self.field = np.zeros((self.size[0], self.size[0]), dtype=int)
+		# self.field = np.zeros((self.size[0], self.size[0]), dtype=int)
 
 
 	# def field_update(self):
@@ -57,18 +59,35 @@ class game:
 
 	def play(self):
 
-		self.snake = snake()
-		self.snake.x_head = np.random.randint(0, self.size[0])
-		self.snake.y_head = np.random.randint(0, self.size[0])
+		self.add_snake()
+		self.add_food()
 
 		while True:
 			self.snake.move()
 			self.represent()
 
 
+	def add_snake(self):
+
+		self.snake = snake()
+		self.snake.x_head = np.random.randint(0, self.size[0])
+		self.snake.y_head = np.random.randint(0, self.size[0])
+
+
+	def add_food(self):
+
+		self.food = food()
+		self.food.x_food = np.random.randint(0, self.size[0])
+		self.food.y_food = np.random.randint(0, self.size[0])
+
+
 	def represent(self, frequency=30):
 
 		self.window.fill(self.background_color)
+
+		pygame.draw.rect(self.window, self.food_color,
+			pygame.Rect(self.food.y_food*self.size[1], self.food.x_food*self.size[1],
+				self.size[1], self.size[1]))
 
 		for coord in self.snake.occupied:
 			pygame.draw.rect(self.window, self.snake_color,
