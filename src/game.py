@@ -4,6 +4,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 import argparse
 import sys
+from snake import *
 
 
 class game:
@@ -38,13 +39,39 @@ class game:
 
 		self.size = size
 		self.background_color = (202, 202, 202)
+		self.snake_color = (66, 149, 71)
 		self.clock = pygame.time.Clock()
 		self.window = pygame.display.set_mode((self.size[0]*self.size[1],
 											self.size[0]*self.size[1]))
+		self.field = np.zeros((self.size[0], self.size[0]), dtype=int)
 
-	def represent(self, frequency=24):
+
+	def field_update(self):
+
+		self.field = np.zeros((self.size[0], self.size[0]), dtype=int)
+		for coord in self.snake.occupied:
+			self.field[coord] = 1
+
+
+	def play(self):
+
+		self.snake = snake()
+		self.snake.x_head = np.random.randint(0, self.size[0])
+		self.snake.y_head = np.random.randint(0, self.size[0])
+
+		while True:
+			self.snake.move()
+			self.represent()
+
+
+	def represent(self, frequency=30):
 
 		self.window.fill(self.background_color)
+
+		for coord in self.snake.occupied:
+			pygame.draw.rect(self.window, self.snake_color,
+				pygame.Rect(coord[1]*self.size[1], coord[0]*self.size[1],
+					self.size[1], self.size[1]))
 
 		pygame.display.flip()
 		self.clock.tick(frequency)
@@ -60,12 +87,10 @@ def main():
 
 	args = parser.parse_args()
 
-	print(args.size)
-
 	G = game(args.size)
 
 	while True:
-		G.represent()
+		G.play()
 
 
 if __name__ == "__main__":
