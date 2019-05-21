@@ -13,7 +13,7 @@ class snake:
 	Attributes
 	----------
 	length : int
-		lenght of the snake
+		length of the snake
 	fitness : int
 		fitness of the snake
 	x_head : int
@@ -32,11 +32,10 @@ class snake:
 
 	def __init__(self):
 
-		self.lenght = 1
+		self.length = 1
 		self.fitness = 0
 
-		self.x_head = None
-		self.y_head = None
+		self.position = [None, None]
 
 		self.direction = random.choice(['U', 'R', 'D', 'L'])
 		self.occupied = []
@@ -57,13 +56,20 @@ class snake:
 					self.direction = 'L'
 				elif event.key == pygame.K_ESCAPE: quit()
 
-		if self.direction == 'U': self.y_head -= 1
-		elif self.direction == 'R': self.x_head += 1
-		elif self.direction == 'D': self.y_head += 1
-		else: self.x_head -= 1
-
-		self.position = (self.y_head, self.x_head)
+		if self.direction == 'U': self.position[0] -= 1
+		elif self.direction == 'R': self.position[1] += 1
+		elif self.direction == 'D': self.position[0] += 1
+		else: self.position[1] -= 1
 
 		self.occupied.insert(0, self.position)
-		if len(self.occupied) > self.lenght:
+		if len(self.occupied) > self.length:
 			del self.occupied[-1]
+
+	def eat_not(self, food):
+
+		if self.position == food.position:
+			self.fitness += 10
+			self.length += 1
+			return False
+		else:
+			return True

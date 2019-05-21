@@ -8,27 +8,22 @@ def test_snake():
 
 def test_init_snake(test_snake):
 
-	assert test_snake.lenght == 1
+	assert test_snake.length == 1
 	assert test_snake.fitness == 0
 	assert test_snake.direction in ['U', 'R', 'D', 'L']
 
 @pytest.mark.xfail(reason="video system not initialized")
 def test_move(test_snake):
 
-	test_snake.x_head = 1
-	test_snake.y_head = 1
+	test_snake.position = [1, 1]
 
 	test_snake.move()
 
 	if test_snake.direction == 'U':
-		assert test_snake.y_head == 0
-		assert test_snake.x_head == 1
+		assert test_snake.position == [0, 1]
 	elif test_snake.direction == 'R':
-		assert test_snake.y_head == 1
-		assert test_snake.x_head == 2
+		assert test_snake.position == [1, 2]
 	elif test_snake.direction == 'D':
-		assert test_snake.y_head == 2
-		assert test_snake.x_head == 1
+		assert test_snake.position == [2, 1]
 	else:
-		assert test_snake.y_head == 1
-		assert test_snake.x_head == 0
+		assert test_snake.position == [1, 0]

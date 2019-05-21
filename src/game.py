@@ -13,6 +13,8 @@ class game:
 		describes the background color of the game window
 	snake_color : tuple
 		describes the snake color in the game window
+	food_color : tuple
+		describes the food color in the game window
 	clock : pygame.time object
 		used to control the refresh of the game window
 	window : pygame.display object
@@ -26,6 +28,10 @@ class game:
 		updates the field array
 	play()
 		runs the game
+	add_snake()
+		creates a new snake
+	add_food()
+		creates new food
 	represent(frequency=30)
 		depicts the game window
 	"""
@@ -62,7 +68,8 @@ class game:
 		self.add_snake()
 		self.add_food()
 
-		while True:
+		while self.snake.eat_not(self.food):
+
 			self.snake.move()
 			self.represent()
 
@@ -70,23 +77,24 @@ class game:
 	def add_snake(self):
 
 		self.snake = snake()
-		self.snake.x_head = np.random.randint(0, self.size[0])
-		self.snake.y_head = np.random.randint(0, self.size[0])
+		x_snake = np.random.randint(0, self.size[0])
+		y_snake = np.random.randint(0, self.size[0])
+		self.snake.position = [y_snake, x_snake]
 
 
 	def add_food(self):
 
 		self.food = food()
-		self.food.x_food = np.random.randint(0, self.size[0])
-		self.food.y_food = np.random.randint(0, self.size[0])
+		x_food = np.random.randint(0, self.size[0])
+		y_food = np.random.randint(0, self.size[0])
+		self.food.position = [y_food, x_food]
 
-
-	def represent(self, frequency=30):
+	def represent(self, frequency=24):
 
 		self.window.fill(self.background_color)
 
 		pygame.draw.rect(self.window, self.food_color,
-			pygame.Rect(self.food.y_food*self.size[1], self.food.x_food*self.size[1],
+			pygame.Rect(self.food.position[1]*self.size[1], self.food.position[0]*self.size[1],
 				self.size[1], self.size[1]))
 
 		for coord in self.snake.occupied:
