@@ -1,7 +1,7 @@
 import pytest
 from game import *
 
-@pytest.mark.xfail
+@pytest.mark.xfail(reason="video system not initialized")
 @pytest.mark.parametrize("width, square, total",
 						[(40, 20, 800),
 						(10, 10, 100)])
