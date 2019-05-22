@@ -6,6 +6,7 @@ import argparse
 import sys
 import random
 
+
 class snake:
 	"""
 	Class used to simulate the snake
@@ -30,15 +31,17 @@ class snake:
 		gets inputs and moves the snake
 	"""
 
+
 	def __init__(self):
 
 		self.length = 1
 		self.fitness = 0
-
+		self.is_alive = True
 		self.position = [None, None]
 
 		self.direction = random.choice(['U', 'R', 'D', 'L'])
 		self.occupied = []
+
 
 	def move(self):
 
@@ -61,9 +64,10 @@ class snake:
 		elif self.direction == 'D': self.position[0] += 1
 		else: self.position[1] -= 1
 
-		self.occupied.insert(0, self.position)
+		self.occupied.insert(0, self.position.copy())
 		if len(self.occupied) > self.length:
 			del self.occupied[-1]
+
 
 	def eat_not(self, food):
 

@@ -65,13 +65,13 @@ class game:
 
 	def play(self):
 
-		self.add_snake()
 		self.add_food()
 
-		while self.snake.eat_not(self.food):
+		while self.snake.is_alive and self.snake.eat_not(self.food):
 
 			self.snake.move()
 			self.represent()
+			self.end()
 
 
 	def add_snake(self):
@@ -88,6 +88,7 @@ class game:
 		x_food = np.random.randint(0, self.size[0])
 		y_food = np.random.randint(0, self.size[0])
 		self.food.position = [y_food, x_food]
+
 
 	def represent(self, frequency=24):
 
@@ -106,6 +107,18 @@ class game:
 		self.clock.tick(frequency)
 
 
+	def end(self):
+
+		if not (0 <= self.snake.position[0] < self.size[0] and
+			0 <= self.snake.position[1] < self.size[0]):
+			self.snake.fitness -= 1
+			self.snake.is_alive = False
+
+		if self.snake.position in self.snake.occupied[1:]:
+			self.snake.fitness -= 1
+			self.snake.is_alive = False
+
+
 def main():
 
 	parser = argparse.ArgumentParser()
@@ -117,8 +130,10 @@ def main():
 	args = parser.parse_args()
 
 	G = game(args.size)
+	G.add_snake()
 
-	while True:
+	while G.snake.is_alive:
+		
 		G.play()
 
 
