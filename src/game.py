@@ -44,12 +44,12 @@ class game:
 		"""
 		Parameters
 		----------
-		size : list of int
+		size : array
 			size[0] is the number of squares in the game field
 			size[1] is the size in pixels of each square
 		"""
 
-		self.size = size
+		self.size = np.array(size)
 		self.background_color = (202, 202, 202)
 		self.snake_color = (66, 149, 71)
 		self.food_color = (183, 43, 56)
@@ -119,6 +119,7 @@ class game:
 					self.size[1], self.size[1]))
 
 		pygame.display.flip()
+		assert type(frequency==int)
 		self.clock.tick(frequency)
 
 

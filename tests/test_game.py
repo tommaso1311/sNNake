@@ -1,17 +1,52 @@
-import pytest
-from game import *
+from fixtures.fixture_size import *
+from fixtures.fixture_game import *
 
 @pytest.mark.xfail(reason="video system not initialized")
-@pytest.mark.parametrize("width, square, total",
-						[(40, 20, 800),
-						(10, 10, 100)])
-def test_init_window(width, square, total):
+def test_init_window(fixture_size, fixture_game):
 	"""
 	Tests correct game window size
 	"""
 
-	G = game([width, square])
+	assert fixture_game.window.get_size()[0] == fixture_size[2]
+	assert fixture_game.window.get_size()[1] == fixture_size[2]
 
-	assert G.window.get_size() == (total, total)
+@pytest.mark.xfail(reason="video system not initialized")
+def test_end(fixture_game):
+	"""
+	Tests correct end game condition
+	"""
 
-# def test
+	fixture_game.add_snake()
+
+	fixture_game.snake.position = np.array([0, 0])
+	fixture_game.end()
+	assert fixture_game.snake.is_alive
+
+	fixture_game.snake.position = np.array([-1, 0])
+	fixture_game.end()
+	assert not fixture_game.snake.is_alive
+
+	fixture_game.snake.is_alive = True
+
+	fixture_game.snake.position = np.array([0, -1])
+	fixture_game.end()
+	assert not fixture_game.snake.is_alive
+
+	fixture_game.snake.is_alive = True
+
+	fixture_game.snake.position = np.array([fixture_game.size[0]+1, 0])
+	fixture_game.end()
+	assert not fixture_game.snake.is_alive
+
+	fixture_game.snake.is_alive = True
+
+	fixture_game.snake.position = np.array([0, fixture_game.size[0]+1])
+	fixture_game.end()
+	assert not fixture_game.snake.is_alive
+
+	fixture_game.snake.is_alive = True
+
+	fixture_game.snake.occupied.insert(1, [0, 0])
+	fixture_game.snake.position = np.array([0, 0])
+	fixture_game.end()
+	assert not fixture_game.snake.is_alive

@@ -5,6 +5,7 @@ import pygame
 import argparse
 import sys
 import random
+from food import *
 
 
 class snake:
