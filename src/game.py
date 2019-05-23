@@ -34,6 +34,9 @@ class game:
 		creates new food
 	represent(frequency=30)
 		depicts the game window
+	end()
+		checks that the snake is still in the field and that has not
+		eaten itself
 	"""
 
 
@@ -70,34 +73,46 @@ class game:
 		while self.snake.is_alive and self.snake.eat_not(self.food):
 
 			self.snake.move()
-			self.represent()
 			self.end()
+			self.represent()
 
 
 	def add_snake(self):
 
 		self.snake = snake()
-		x_snake = np.random.randint(0, self.size[0])
-		y_snake = np.random.randint(0, self.size[0])
-		self.snake.position = [y_snake, x_snake]
+		assert self.snake.is_alive
+
+		# initialize position
+		self.snake.position = np.random.randint(0, self.size[0], 2)
+		self.snake.occupied.insert(0, self.snake.position.copy())
 
 
 	def add_food(self):
 
 		self.food = food()
-		x_food = np.random.randint(0, self.size[0])
-		y_food = np.random.randint(0, self.size[0])
-		self.food.position = [y_food, x_food]
+
+		# initialize position and check to not create new food in snake
+		self.food.position = np.random.randint(0, self.size[0], 2)
+		while any((self.food.position == x).all() for x in self.snake.position):
+			self.add_food()
 
 
 	def represent(self, frequency=24):
+		"""
+		Parameters
+		----------
+		frequency : int
+			refresh per second
+		"""
 
 		self.window.fill(self.background_color)
 
+		# draws food
 		pygame.draw.rect(self.window, self.food_color,
 			pygame.Rect(self.food.position[1]*self.size[1], self.food.position[0]*self.size[1],
 				self.size[1], self.size[1]))
 
+		# draws snake
 		for coord in self.snake.occupied:
 			pygame.draw.rect(self.window, self.snake_color,
 				pygame.Rect(coord[1]*self.size[1], coord[0]*self.size[1],
@@ -109,12 +124,14 @@ class game:
 
 	def end(self):
 
+		# checks if snake is still in the field
 		if not (0 <= self.snake.position[0] < self.size[0] and
 			0 <= self.snake.position[1] < self.size[0]):
 			self.snake.fitness -= 1
 			self.snake.is_alive = False
 
-		if self.snake.position in self.snake.occupied[1:]:
+		# checks if snake has eaten itself
+		if any((self.snake.position == x).all() for x in self.snake.occupied[1:]):
 			self.snake.fitness -= 1
 			self.snake.is_alive = False
 

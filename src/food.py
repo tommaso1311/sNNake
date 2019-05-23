@@ -1,5 +1,13 @@
 class food:
 
 	def __init__(self):
+		"""
+		Class used to create food
 
-		self.position = [None, None]
+		Attributes
+		----------
+		position : array
+			position of food
+		"""
+
+		self.position = None
