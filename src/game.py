@@ -1,5 +1,4 @@
 from snake import *
-from food import *
 
 class game:
 	"""
@@ -77,10 +76,14 @@ class game:
 			self.represent()
 
 
-	def add_snake(self):
+	def add_snake(self, ext_snake=None):
 
-		self.snake = snake()
-		assert self.snake.is_alive
+		if ext_snake == None:
+			self.snake = snake()
+			assert self.snake.is_alive
+		else:
+			self.snake = ext_snake
+
 
 		# initialize position
 		self.snake.position = np.random.randint(0, self.size[0], 2)

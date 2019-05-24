@@ -5,17 +5,16 @@ class neuralnet:
 	Class used to create the neural network controlling snakes
 	"""
 
-	def __init__(self, shape):
+	def __init__(self, shape, new=True):
 
 		assert type(shape) is tuple, "Incorrect shape type (must be a tuple)"
 		assert len(shape) >= 2, "Incorrect shape lenght (must be at least 2)"
 
 		self.shape = shape
-		# self.n_inputs = shape[0]
-		# self.n_outputs = shape[-1]
-		# self.hidden_layers = shape[1:-1]
+		self.weights = []
 
-		self.weights = self.weights_creator()
+		if new:
+			self.weights = self.weights_creator()
 
 
 	def weights_creator(self):
