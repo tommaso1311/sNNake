@@ -72,6 +72,9 @@ class game:
 		while self.snake.is_alive and self.snake.eat_not(self.food):
 
 			self.snake.move()
+			self.snake.get_status(self.size, self.food)
+			# print(self.snake.position)
+			# print(self.snake.occupied)
 			self.end()
 			self.represent()
 
