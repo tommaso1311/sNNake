@@ -60,7 +60,7 @@ class snake:
 		self.occupied = []
 
 
-	def move(self):
+	def move(self, game_size=None, food_obj=None):
 
 		if self.human_controlled:
 
@@ -81,7 +81,7 @@ class snake:
 
 		else:
 
-			self.get_status()
+			self.get_status(game_size, food_obj)
 			self.decide()
 
 		# upgrade the position
@@ -159,4 +159,11 @@ class snake:
 
 	def decide(self):
 
-		pass
+		out = self.neural_network.get_output(self.status)
+		max_index = out.argmax(axis=0)
+		direction_index = self.directions.index(self.direction)
+
+		if max_index == 0:
+			self.direction = self.directions[(direction_index-1) % len(self.directions)]
+		elif max_index == 2:
+			self.direction = self.directions[(direction_index+1) % len(self.directions)]
