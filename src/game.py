@@ -18,13 +18,9 @@ class game:
 		used to control the refresh of the game window
 	window : pygame.display object
 		used to represent the game
-	field : array
-		used to represent the game
 
 	Methods
 	-------
-	field_update()
-		updates the field array
 	play()
 		runs the game
 	add_snake()
@@ -55,14 +51,6 @@ class game:
 		self.clock = pygame.time.Clock()
 		self.window = pygame.display.set_mode((self.size[0]*self.size[1],
 											self.size[0]*self.size[1]))
-		# self.field = np.zeros((self.size[0], self.size[0]), dtype=int)
-
-
-	# def field_update(self):
-
-	# 	self.field = np.zeros((self.size[0], self.size[0]), dtype=int)
-	# 	for coord in self.snake.occupied:
-	# 		self.field[coord] = 1
 
 
 	def play(self):
@@ -72,9 +60,6 @@ class game:
 		while self.snake.is_alive and self.snake.eat_not(self.food):
 
 			self.snake.move(self.size, self.food)
-			self.snake.get_status(self.size, self.food)
-			# print(self.snake.position)
-			# print(self.snake.occupied)
 			self.end()
 			self.represent()
 
@@ -154,7 +139,7 @@ def main():
 	args = parser.parse_args()
 
 	G = game(args.size)
-	sn = snake(False, (5, 2, 3))
+	sn = snake(True, (5, 2, 3))
 	G.add_snake(sn)
 
 	while G.snake.is_alive:

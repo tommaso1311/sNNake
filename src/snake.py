@@ -15,11 +15,15 @@ class snake:
 
 	Attributes
 	----------
+	human : bool
+		tells if the snake is controlled by user or neural network
+	neural_network : neuralnet
+		neural network from neuralnet
 	length : int
 		length of the snake
 	fitness : int
 		fitness of the snake
-	is_alive : boolean
+	is_alive : bool
 		tells if the snake is alive
 	position : array
 		position of the snake
@@ -27,28 +31,36 @@ class snake:
 		direction in which the snake is moving
 	occupied : list
 		list of coordinates occupied
+	status : array
+		status[0:3] is distances from obstacles
+		status[3] is distance from food
+		status[4] is angle between snake and food
 
 	Methods
 	-------
 	__init__()
 		initialize a new snake
-	move()
+	move(game_size, food_obj)
 		gets inputs and moves the snake
-	eat_not()
+	eat_not(food_obj)
 		checks if the snake has eaten food
+	get_status(game_size, food_obj)
+		gets the status vector
 	"""
 
 
-	def __init__(self, human_controlled=True, neural_network=None):
+	def __init__(self, human=True, neural_network=None):
 
-		self.human_controlled = human_controlled
+		assert isinstance(human, bool)
 
-		if not self.human_controlled and isinstance(neural_network, neuralnet):
+		self.human = human
+
+		if not self.human and isinstance(neural_network, neuralnet):
 			self.neural_network = neural_network
-		elif not self.human_controlled and isinstance(neural_network, tuple):
+		elif not self.human and isinstance(neural_network, tuple):
 			self.neural_network = neuralnet(neural_network)
-		elif not self.human_controlled:
-			raise ValueError("Error: neural_network is neither a neuralnet object nor a tuple!")
+		elif not self.human:
+			raise ValueError("Error: snake is not human controlled but neural_network is neither a neuralnet object nor a tuple!")
 
 		self.length = 1
 		self.fitness = 0
@@ -59,10 +71,18 @@ class snake:
 		self.direction = random.choice(self.directions)
 		self.occupied = []
 
+		self.status = None
+
 
 	def move(self, game_size=None, food_obj=None):
+		"""
+		Parameters
+		----------
+		game_size : array
+		food_obj : food object
+		"""
 
-		if self.human_controlled:
+		if self.human:
 
 			events = pygame.event.get()
 
@@ -81,8 +101,20 @@ class snake:
 
 		else:
 
+			assert isinstance(game_size, np.ndarray), "game_size is not an array"
+			assert isinstance(food_obj, food), "food_obj is not a food object"
+
 			self.get_status(game_size, food_obj)
-			self.decide()
+			
+			out = self.neural_network.get_output(self.status)
+			max_index = out.argmax(axis=0)
+			direction_index = self.directions.index(self.direction)
+
+			# changing direction based on the neural network result
+			if max_index == 0:
+				self.direction = self.directions[(direction_index-1) % len(self.directions)]
+			elif max_index == 2:
+				self.direction = self.directions[(direction_index+1) % len(self.directions)]
 
 		# upgrade the position
 		if self.direction == 'U': self.position[0] -= 1
@@ -103,6 +135,8 @@ class snake:
 		food : food object
 		"""
 
+		assert isinstance(food_obj, food), "food_obj is not a food object"
+
 		if (self.position == food_obj.position).all():
 			self.fitness += 10
 			self.length += 1
@@ -112,15 +146,23 @@ class snake:
 
 
 	def get_status(self, game_size, food_obj):
-
-		self.status = np.zeros(5)
+		"""
+		Parameters
+		----------
+		game_size : array
+		food_obj : food object
+		"""
 
 		assert isinstance(game_size, np.ndarray)
 		assert isinstance(food_obj, food)
 
-		bounds = np.array([self.position[1], self.position[0],
+		self.status = np.zeros(5)
+
+		# creating a vector with distances from boundaries
+		boundaries = np.array([self.position[1], self.position[0],
 				game_size[0]-self.position[1]-1, game_size[0]-self.position[0]-1])
 
+		# creating a vector with distances from the body
 		body = np.array([game_size[0]]*4)
 
 		if self.occupied[1:]:
@@ -137,12 +179,16 @@ class snake:
 			if temp[temp[:,0]<0, 0].size != 0:
 				body[3] = min(np.abs(temp[temp[:,0]<0, 0]))-1
 
-		seen = np.minimum(bounds, body)/game_size[0]
+		# creating a vector with minimum distances from something and normalizes it
+		seen = np.minimum(boundaries, body)/game_size[0]
 
+		# reducing the size of the vector removing the information regarding the direction
+		# opposed to the movement
 		index = self.directions.index(self.direction)
 		seen = np.delete(seen, index)
 		seen = np.roll(seen, -index)
 
+		# adding distances from food and angle to the final status vector
 		self.status[0:3] = seen
 		self.status[3] = np.sqrt((food_obj.position[0]-self.position[0])**2+(food_obj.position[1]-self.position[1])**2)/(game_size[0]*1.41421356237)
 		coord = np.subtract(food_obj.position, self.position)
@@ -155,15 +201,3 @@ class snake:
 			self.status[4] = np.arctan2(coord[1], coord[0])/np.pi
 		else:
 			self.status[4] = np.arctan2(-coord[0], coord[1])/np.pi
-
-
-	def decide(self):
-
-		out = self.neural_network.get_output(self.status)
-		max_index = out.argmax(axis=0)
-		direction_index = self.directions.index(self.direction)
-
-		if max_index == 0:
-			self.direction = self.directions[(direction_index-1) % len(self.directions)]
-		elif max_index == 2:
-			self.direction = self.directions[(direction_index+1) % len(self.directions)]
