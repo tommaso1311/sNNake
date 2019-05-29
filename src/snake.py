@@ -97,6 +97,7 @@ class snake:
 
 		if self.human:
 
+			self.get_status(game_size, food_obj)
 			events = pygame.event.get()
 
 			# listens to key pressure
@@ -195,16 +196,12 @@ class snake:
 		# adding distances from food and angle to the final status vector
 		self.status[0:3] = seen
 		self.status[3] = np.linalg.norm(self.position-food_obj.position)/(game_size[0]*1.41421356237)
+		
 		coord = food_obj.position - self.position
+		coords = [-coord[0], coord[1], coord[0], -coord[1]]
+		
+		self.status[4] = np.arctan2(coords[index%4], coords[(index+1)%4])/np.pi
 
-		if index == 3:
-			self.status[4] = np.arctan2(-coord[1], -coord[0])/np.pi
-		elif index == 2:
-			self.status[4] = np.arctan2(coord[0], -coord[1])/np.pi
-		elif index == 1:
-			self.status[4] = np.arctan2(coord[1], coord[0])/np.pi
-		else:
-			self.status[4] = np.arctan2(-coord[0], coord[1])/np.pi
 
 	def decide(self):
 			
