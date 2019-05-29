@@ -61,12 +61,12 @@ def create_generation(generation, q=0.05):
 	assert isinstance(generation, list)
 	for element in generation: assert isinstance(element, snake)
 
-	p = np.fromfunction(lambda r: q*(1-q)**r, shape=(n,))
+	p = np.fromfunction(lambda r: q*(1-q)**r, shape=(len(generation),))
 	p = p/p.sum()
 
 	new_generation = []
 
-	for i in len(generation):
+	for i in range(len(generation)):
 
 		neural_network_a = np.random.choice(generation, p=p).neural_network
 		neural_network_b = np.random.choice(generation, p=p).neural_network

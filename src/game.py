@@ -35,7 +35,7 @@ class game:
 	"""
 
 
-	def __init__(self, size=[40, 20]):
+	def __init__(self, size=[40, 20], duration=1e3):
 		"""
 		Parameters
 		----------
@@ -45,6 +45,8 @@ class game:
 		"""
 
 		self.size = np.array(size)
+		self.step = 0
+		self.duration = duration
 		self.background_color = (202, 202, 202)
 		self.snake_color = (66, 149, 71)
 		self.food_color = (183, 43, 56)
@@ -125,6 +127,12 @@ class game:
 		# checks if snake has eaten itself
 		if any((self.snake.position == x).all() for x in self.snake.occupied[1:]):
 			self.snake.fitness -= 1
+			self.snake.is_alive = False
+
+		# checks if the game has ended
+		if self.step < self.duration:
+			self.step += 1
+		else:
 			self.snake.is_alive = False
 
 

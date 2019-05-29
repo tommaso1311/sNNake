@@ -4,20 +4,25 @@ import genetic_algorithm as ga
 
 def main():
 
+	number_of_gen = 10
 	snakes_per_gen = 10
 	shape = (5, 2, 3)
-	starting_generation = []
+
+	generation = []
 	for i in range(snakes_per_gen):
-		starting_generation.append(snake(False, shape))
+		generation.append(snake(False, shape))
 
-	for sn in starting_generation:
+	for gen in range(number_of_gen):
 
-		G = game([10, 20])
-		G.add_snake(sn)
-		G.play()
+		for sn in generation:
 
-	for sn in starting_generation:
-		print(sn.fitness)
+			G = game([10, 20], 10)
+			G.add_snake(sn)
+			G.play()
+
+		generation = ga.evaluate_generation(generation)
+		print(np.mean([x.fitness for x in generation]))
+		generation = ga.create_generation(generation)
 
 
 if __name__ == "__main__":
