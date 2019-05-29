@@ -72,6 +72,8 @@ class snake:
 			self.neural_network = neuralnet(neural_network)
 		elif not self.human:
 			raise ValueError("Error: snake is not human controlled but neural_network is neither a neuralnet object nor a tuple!")
+		else:
+			self.neural_network = neural_network
 
 		self.length = 1
 		self.fitness = 0
@@ -186,7 +188,7 @@ class snake:
 
 		# reducing the size of the vector removing the information regarding the direction
 		# opposed to the movement
-		index = (self.directions.index(self.direction)+2) % len(self.directions)
+		index = (self.directions.index(self.direction)+2) % 4
 		seen = np.delete(seen, index)
 		seen = np.roll(seen, -index)
 
@@ -212,6 +214,6 @@ class snake:
 
 		# changing direction based on the neural network result
 		if max_index == 0:
-			self.direction = self.directions[(direction_index-1) % len(self.directions)]
+			self.direction = self.directions[(direction_index-1) % 4]
 		elif max_index == 2:
-			self.direction = self.directions[(direction_index+1) % len(self.directions)]
+			self.direction = self.directions[(direction_index+1) % 4]

@@ -51,7 +51,11 @@ def test_eat_not(fixture_snake, fixture_food):
 	assert fixture_snake.fitness > fitness_before
 	assert fixture_snake.length > length_before
 
+
 def test_get_status(fixture_snake, fixture_food, fixture_size):
+	"""
+	Tests correct status vector is created
+	"""
 
 	half = int(fixture_size[0]/2)/fixture_size[0]
 	half2 = int((fixture_size[0]-1)/2)/fixture_size[0]
@@ -73,11 +77,27 @@ def test_get_status(fixture_snake, fixture_food, fixture_size):
 		fixture_snake.direction = fixture_snake.directions[i]
 		fixture_snake.get_status(fixture_size, fixture_food)
 
-		assert (fixture_snake.status[0:3] == np.roll(obstacles_answers, -i)[0:-1]).all()
+		np.testing.assert_allclose(fixture_snake.status[0:3], np.roll(obstacles_answers, -i)[0:-1])
 		assert fixture_snake.status[3] == distance
 		assert fixture_snake.status[4] == angles_answers[i]
 
 
 def test_decide(fixture_snake):
+	"""
+	Tests if the correct decision is made by the neuralnetwork
+	"""
 
-	assert True
+	fixture_snake.neural_network = neuralnet((3, 3))
+	fixture_snake.neural_network.weights[0] = np.eye(3)
+
+	for j in range(3):
+
+		fixture_snake.status = np.zeros(3)
+		fixture_snake.status[j] = 1
+
+		for i in range(len(fixture_snake.directions)):
+
+			fixture_snake.direction = fixture_snake.directions[i]
+			fixture_snake.decide()
+
+			assert fixture_snake.direction == fixture_snake.directions[(i+j-1)%4]
