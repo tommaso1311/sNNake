@@ -35,7 +35,7 @@ class game:
 	"""
 
 
-	def __init__(self, size):
+	def __init__(self, size=[40, 20]):
 		"""
 		Parameters
 		----------

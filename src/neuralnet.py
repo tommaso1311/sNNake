@@ -22,7 +22,7 @@ class neuralnet:
 		computes weights matrices product to get neural network output
 	"""
 
-	def __init__(self, shape, new=True):
+	def __init__(self, shape, new=True, weights=None):
 
 		assert type(shape) is tuple, "Incorrect shape type (must be a tuple)"
 		assert len(shape) >= 2, "Incorrect shape lenght (must be at least 2)"
@@ -33,6 +33,15 @@ class neuralnet:
 
 		if new:
 			self.weights = self.weights_creator()
+		else:
+			assert isinstance(weights, list)
+			for element in weights:
+				assert isinstance(element, np.ndarray)
+			assert len(weights) == len(shape)-1
+			for i in range(len(shape)-1):
+				assert weights[i].shape == (shape[i+1], shape[i])
+
+			self.weights = weights
 
 
 	def weights_creator(self):
