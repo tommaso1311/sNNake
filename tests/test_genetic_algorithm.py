@@ -3,11 +3,14 @@ from fixtures.fixture_shape import *
 import genetic_algorithm as ga
 
 def test_neuralnet_crossover(fixture_neural_network, fixture_neural_network2):
+	"""
+	Tests the correct crossover
+	"""
 
 	a = fixture_neural_network
 	b = fixture_neural_network2
 
-	c = ga.neural_network_crossover(a, b)
+	c = ga.neural_network_crossover(a, b, crossover_prob=1, mutation_prob=0)
 
 	for i in range(len(c.shape)-1):
 		
