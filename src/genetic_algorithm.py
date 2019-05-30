@@ -2,7 +2,7 @@ import numpy as np
 from snake import *
 
 
-def neuralnet_crossover(neural_network_a, neural_network_b, crossover_prob=0.95, mutation_prob=0.01):
+def neural_network_crossover(neural_network_a, neural_network_b, crossover_prob=0.95, mutation_prob=0.01):
 	"""
 	Used to mix two neural networks as part of the genetic algorithm
 
@@ -60,7 +60,7 @@ def neuralnet_crossover(neural_network_a, neural_network_b, crossover_prob=0.95,
 	return neuralnet_final
 
 
-def evaluate_generation(generation):
+def sort_generation(generation):
 	"""
 	Sorts the generation by fitness in decreasing order
 	"""
@@ -92,7 +92,7 @@ def create_generation(generation, q=0.05, crossover_prob=0.95, mutation_prob=0.0
 		neural_network_a = np.random.choice(generation, p=p).neural_network
 		neural_network_b = np.random.choice(generation, p=p).neural_network
 
-		neural_network_final = neuralnet_crossover(neural_network_a, neural_network_b, crossover_prob, mutation_prob)
+		neural_network_final = neural_network_crossover(neural_network_a, neural_network_b, crossover_prob, mutation_prob)
 
 		snake_final = snake(neural_network_final)
 

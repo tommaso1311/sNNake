@@ -21,7 +21,7 @@ def main():
 			G.play()
 
 
-		generation = ga.evaluate_generation(generation)
+		generation = ga.sort_generation(generation)
 		generation = ga.create_generation(generation)
 		# if gen % 10 == 0:
 		print("generation ", gen, generation[0].fitness)

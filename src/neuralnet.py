@@ -35,9 +35,9 @@ class neuralnet:
 			self.weights = self.weights_creator()
 		else:
 			assert isinstance(weights, list)
+			assert len(weights) == len(shape)-1
 			for element in weights:
 				assert isinstance(element, np.ndarray)
-			assert len(weights) == len(shape)-1
 			for i in range(len(shape)-1):
 				assert weights[i].shape == (shape[i+1], shape[i])
 
