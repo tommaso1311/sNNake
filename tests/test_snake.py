@@ -1,6 +1,7 @@
 from fixtures.fixture_snake import *
 from fixtures.fixture_food import *
 from fixtures.fixture_size import *
+from fixtures.fixture_shape import *
 
 
 def test_init_snake(fixture_snake):
@@ -15,7 +16,7 @@ def test_init_snake(fixture_snake):
 	assert not len(fixture_snake.occupied)
 
 
-@pytest.mark.xfail(reason="video system not initialized")
+# @pytest.mark.xfail(reason="video system not initialized")
 def test_move(fixture_snake, fixture_size, fixture_food):
 	"""
 	Tests correct snake movement

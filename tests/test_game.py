@@ -10,7 +10,7 @@ def test_init_window(fixture_size, fixture_game):
 	assert fixture_game.window.get_size()[0] == fixture_size[2]
 	assert fixture_game.window.get_size()[1] == fixture_size[2]
 
-@pytest.mark.xfail(reason="video system not initialized")
+# @pytest.mark.xfail(reason="video system not initialized")
 def test_end(fixture_game):
 	"""
 	Tests correct end game condition

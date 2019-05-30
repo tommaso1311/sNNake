@@ -8,6 +8,12 @@ class game:
 	----------
 	size : list
 		a list of integers used to represent the game window
+	view : bool
+		if True represent the game
+	step : int
+		current duration of the game
+	duration : float
+		max duration of the game
 	background_color : tuple
 		describes the background color of the game window
 	snake_color : tuple
@@ -35,23 +41,30 @@ class game:
 	"""
 
 
-	def __init__(self, size=[40, 20], duration=1e3):
+	def __init__(self, size=[40, 20], view=False, duration=1e3):
 		"""
 		Parameters
 		----------
 		size : array
 			size[0] is the number of squares in the game field
 			size[1] is the size in pixels of each square
+		view : bool
+			if True represent the game
+		duration : float
+			max duration of the game
 		"""
 
 		self.size = np.array(size)
+		self.view = view
 		self.step = 0
 		self.duration = duration
 		self.background_color = (202, 202, 202)
 		self.snake_color = (66, 149, 71)
 		self.food_color = (183, 43, 56)
 		self.clock = pygame.time.Clock()
-		self.window = pygame.display.set_mode((self.size[0]*self.size[1],
+
+		if self.view:
+			self.window = pygame.display.set_mode((self.size[0]*self.size[1],
 											self.size[0]*self.size[1]))
 
 
@@ -63,7 +76,8 @@ class game:
 
 			self.snake.move(self.size, self.food)
 			self.end()
-			self.represent()
+			if self.view:
+				self.represent()
 
 
 	def add_snake(self, ext_snake=None):
@@ -146,8 +160,8 @@ def main():
 
 	args = parser.parse_args()
 
-	G = game(args.size)
-	sn = snake(True, (5, 2, 3))
+	G = game(args.size, True)
+	sn = snake(human=True)
 	G.add_snake(sn)
 
 	while G.snake.is_alive:

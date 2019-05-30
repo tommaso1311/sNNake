@@ -51,29 +51,32 @@ class snake:
 	"""
 
 
-	def __init__(self, human=True, neural_network=None):
+	def __init__(self, neural_network=None, human=False):
 		"""
 		Parameters
 		----------
 		human : bool
 			tells if the snake is controlled by user or neural network
 		neural_network : tuple || neuralnet
+			if it is None, human can be True (controlled) or False (used in tests)
 			if it is a tuple, creates a new neuralnet object with that shape
 			if it is a neuralnet object, copies the neural network
 		"""
 
 		assert isinstance(human, bool)
 
-		self.human = human
-
-		if not self.human and isinstance(neural_network, neuralnet):
+		if neural_network == None:
+			self.neural_network = None
+			self.human = human
+		elif isinstance(neural_network, neuralnet):
 			self.neural_network = neural_network
-		elif not self.human and isinstance(neural_network, tuple):
+			self.human = False
+		elif isinstance(neural_network, tuple):
 			self.neural_network = neuralnet(neural_network)
-		elif not self.human:
-			raise ValueError("Error: snake is not human controlled but neural_network is neither a neuralnet object nor a tuple!")
+			self.human = False
 		else:
-			self.neural_network = neural_network
+			raise ValueError(("Error: neural_network is neither a neuralnet object nor a tuple!"))
+
 
 		self.length = 1
 		self.fitness = 0
@@ -97,7 +100,6 @@ class snake:
 
 		if self.human:
 
-			self.get_status(game_size, food_obj)
 			events = pygame.event.get()
 
 			# listens to key pressure
@@ -113,7 +115,7 @@ class snake:
 						self.direction = 'L'
 					elif event.key == pygame.K_ESCAPE: quit()
 
-		else:
+		elif self.neural_network != None:
 
 			assert isinstance(game_size, np.ndarray), "game_size is not an array"
 			assert isinstance(food_obj, food), "food_obj is not a food object"
@@ -199,7 +201,7 @@ class snake:
 		
 		coord = food_obj.position - self.position
 		coords = [-coord[0], coord[1], coord[0], -coord[1]]
-		
+
 		self.status[4] = np.arctan2(coords[index%4], coords[(index+1)%4])/np.pi
 
 

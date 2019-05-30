@@ -3,6 +3,20 @@ from snake import *
 
 
 def neuralnet_crossover(neural_network_a, neural_network_b, crossover_prob=0.95, mutation_prob=0.01):
+	"""
+	Used to mix two neural networks as part of the genetic algorithm
+
+	Parameters
+	----------
+	neural_network_a : neuralnet
+		first neural network to mix
+	neural_network_b : neuralnet
+		second neural network to mix
+	crossover_prob : float
+		probability of crossover
+	mutation_prob : float
+		probability of mutation
+	"""
 
 	assert isinstance(neural_network_a, neuralnet)
 	assert isinstance(neural_network_b, neuralnet)
@@ -19,6 +33,7 @@ def neuralnet_crossover(neural_network_a, neural_network_b, crossover_prob=0.95,
 
 		if np.random.rand() < crossover_prob:
 
+			# perform a crossover
 			crossover = np.random.randint(0, len(neural_network_a_genes))
 			temp = neural_network_a_genes[crossover:len(neural_network_a_genes)+1].copy()
 
@@ -27,12 +42,14 @@ def neuralnet_crossover(neural_network_a, neural_network_b, crossover_prob=0.95,
 
 		if np.random.rand() < mutation_prob:
 
+			# perform a mutation
 			m = np.random.randint(0, len(neural_network_a_genes))
 			mutation = np.random.uniform(-1, 1)
 
 			neural_network_a_genes[m] = mutation
 			neural_network_b_genes[m] = mutation
 
+		# decide which neural network is returned
 		if np.random.choice([-1, 1]) > 0:
 			weights.append(neural_network_a_genes.reshape(neural_network_a.weights[i].shape))
 		else:
@@ -44,6 +61,9 @@ def neuralnet_crossover(neural_network_a, neural_network_b, crossover_prob=0.95,
 
 
 def evaluate_generation(generation):
+	"""
+	Sorts the generation by fitness in decreasing order
+	"""
 
 	assert isinstance(generation, list)
 	for element in generation: assert isinstance(element, snake)
@@ -53,9 +73,10 @@ def evaluate_generation(generation):
 	return generation
 
 
-def create_generation(generation, q=0.05):
-
-	# TODO add possibility to modify crossover parameters!
+def create_generation(generation, q=0.05, crossover_prob=0.95, mutation_prob=0.01):
+	"""
+	Creates a new generation out of the older one
+	"""
 
 	assert 1 >= q >= 0
 	assert isinstance(generation, list)
@@ -71,9 +92,9 @@ def create_generation(generation, q=0.05):
 		neural_network_a = np.random.choice(generation, p=p).neural_network
 		neural_network_b = np.random.choice(generation, p=p).neural_network
 
-		neural_network_final = neuralnet_crossover(neural_network_b, neural_network_b)
+		neural_network_final = neuralnet_crossover(neural_network_a, neural_network_b, crossover_prob, mutation_prob)
 
-		snake_final = snake(False, neural_network_final)
+		snake_final = snake(neural_network_final)
 
 		new_generation.append(snake_final)
 
