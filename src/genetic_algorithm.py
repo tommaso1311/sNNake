@@ -82,6 +82,8 @@ def create_generation(generation, q=0.05, crossover_prob=0.95, mutation_prob=0.0
 	assert isinstance(generation, list)
 	for element in generation: assert isinstance(element, snake)
 
+	generation = sort_generation(generation)
+
 	p = np.fromfunction(lambda r: q*(1-q)**r, shape=(len(generation),))
 	p = p/p.sum()
 

@@ -16,15 +16,17 @@ def main():
 
 		for sn in generation:
 
-			G = game([20, 20], False, 1000)
+			G = game([10, 20], False, 100)
 			G.add_snake(sn)
-			G.play()
 
+			while G.snake.is_alive:
+				G.play()
 
-		generation = ga.sort_generation(generation)
+		result = np.mean([sn.fitness for sn in generation])
+		print("generation", gen, ": ", result)
+
 		generation = ga.create_generation(generation)
-		# if gen % 10 == 0:
-		print("generation ", gen, generation[0].fitness)
+		
 
 
 if __name__ == "__main__":

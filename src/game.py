@@ -143,7 +143,7 @@ class game:
 			self.snake.fitness -= 1
 			self.snake.is_alive = False
 
-		# checks if the game has ended
+		# checks if the game has ended for reaching max duration
 		if self.step < self.duration:
 			self.step += 1
 		else:

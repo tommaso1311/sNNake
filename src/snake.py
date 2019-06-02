@@ -145,7 +145,7 @@ class snake:
 		assert isinstance(food_obj, food), "food_obj is not a food object"
 
 		if (self.position == food_obj.position).all():
-			self.fitness += 10
+			self.fitness += 1
 			self.length += 1
 			return False
 		else:
