@@ -1,5 +1,4 @@
 from snake import *
-from food import *
 
 class game:
 	"""
@@ -9,6 +8,12 @@ class game:
 	----------
 	size : list
 		a list of integers used to represent the game window
+	view : bool
+		if True represent the game
+	step : int
+		current duration of the game
+	duration : float
+		max duration of the game
 	background_color : tuple
 		describes the background color of the game window
 	snake_color : tuple
@@ -19,13 +24,9 @@ class game:
 		used to control the refresh of the game window
 	window : pygame.display object
 		used to represent the game
-	field : array
-		used to represent the game
 
 	Methods
 	-------
-	field_update()
-		updates the field array
 	play()
 		runs the game
 	add_snake()
@@ -40,30 +41,31 @@ class game:
 	"""
 
 
-	def __init__(self, size):
+	def __init__(self, size=[40, 20], view=False, duration=1e3):
 		"""
 		Parameters
 		----------
 		size : array
 			size[0] is the number of squares in the game field
 			size[1] is the size in pixels of each square
+		view : bool
+			if True represent the game
+		duration : float
+			max duration of the game
 		"""
 
 		self.size = np.array(size)
+		self.view = view
+		self.step = 0
+		self.duration = duration
 		self.background_color = (202, 202, 202)
 		self.snake_color = (66, 149, 71)
 		self.food_color = (183, 43, 56)
 		self.clock = pygame.time.Clock()
-		self.window = pygame.display.set_mode((self.size[0]*self.size[1],
+
+		if self.view:
+			self.window = pygame.display.set_mode((self.size[0]*self.size[1],
 											self.size[0]*self.size[1]))
-		# self.field = np.zeros((self.size[0], self.size[0]), dtype=int)
-
-
-	# def field_update(self):
-
-	# 	self.field = np.zeros((self.size[0], self.size[0]), dtype=int)
-	# 	for coord in self.snake.occupied:
-	# 		self.field[coord] = 1
 
 
 	def play(self):
@@ -72,15 +74,20 @@ class game:
 
 		while self.snake.is_alive and self.snake.eat_not(self.food):
 
-			self.snake.move()
+			self.snake.move(self.size, self.food)
 			self.end()
-			self.represent()
+			if self.view:
+				self.represent()
 
 
-	def add_snake(self):
+	def add_snake(self, ext_snake=None):
 
-		self.snake = snake()
-		assert self.snake.is_alive
+		if ext_snake == None:
+			self.snake = snake()
+			assert self.snake.is_alive
+		else:
+			self.snake = ext_snake
+
 
 		# initialize position
 		self.snake.position = np.random.randint(0, self.size[0], 2)
@@ -136,6 +143,12 @@ class game:
 			self.snake.fitness -= 1
 			self.snake.is_alive = False
 
+		# checks if the game has ended for reaching max duration
+		if self.step < self.duration:
+			self.step += 1
+		else:
+			self.snake.is_alive = False
+
 
 def main():
 
@@ -147,8 +160,9 @@ def main():
 
 	args = parser.parse_args()
 
-	G = game(args.size)
-	G.add_snake()
+	G = game(args.size, True)
+	sn = snake(human=True)
+	G.add_snake(sn)
 
 	while G.snake.is_alive:
 		

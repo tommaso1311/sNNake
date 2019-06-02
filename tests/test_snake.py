@@ -1,5 +1,7 @@
 from fixtures.fixture_snake import *
 from fixtures.fixture_food import *
+from fixtures.fixture_size import *
+from fixtures.fixture_shape import *
 
 
 def test_init_snake(fixture_snake):
@@ -9,40 +11,27 @@ def test_init_snake(fixture_snake):
 
 	assert fixture_snake.length == 1
 	assert fixture_snake.fitness == 0
-	assert fixture_snake.direction in ['U', 'R', 'D', 'L']
+	assert fixture_snake.direction in ['R', 'D', 'L', 'U']
 	assert fixture_snake.is_alive
 	assert not len(fixture_snake.occupied)
 
 
-@pytest.mark.xfail(reason="video system not initialized")
-def test_move(fixture_snake):
+# @pytest.mark.xfail(reason="video system not initialized")
+def test_move(fixture_snake, fixture_size, fixture_food):
 	"""
 	Tests correct snake movement
 	"""	
 
-	fixture_snake.position = np.array([1, 1])
-	fixture_snake.direction = 'U'
-	fixture_snake.move()
+	final_positions = [np.array([1, 0]), np.array([0, 1]),
+						np.array([1, 2]), np.array([2, 1])]
 
-	assert (fixture_snake.position == np.array([0, 1])).all()
+	for i in range(len(fixture_snake.directions)):
 
-	fixture_snake.position = np.array([1, 1])
-	fixture_snake.direction = 'R'
-	fixture_snake.move()
-
-	assert (fixture_snake.position == np.array([1, 2])).all()
-
-	fixture_snake.position = np.array([1, 1])
-	fixture_snake.direction = 'D'
-	fixture_snake.move()
-	
-	assert (fixture_snake.position == np.array([2, 1])).all()
-
-	fixture_snake.position = np.array([1, 1])
-	fixture_snake.direction = 'L'
-	fixture_snake.move()
-	
-	assert (fixture_snake.position == np.array([1, 0])).all()
+		fixture_snake.position = np.array([1, 1])
+		fixture_snake.direction = fixture_snake.directions[i]
+		fixture_snake.move()
+		
+		assert (fixture_snake.position == final_positions[i]).all()
 
 
 def test_eat_not(fixture_snake, fixture_food):
@@ -62,3 +51,54 @@ def test_eat_not(fixture_snake, fixture_food):
 	assert not fixture_snake.eat_not(fixture_food)
 	assert fixture_snake.fitness > fitness_before
 	assert fixture_snake.length > length_before
+
+
+def test_get_status(fixture_snake, fixture_food, fixture_size):
+	"""
+	Tests correct status vector is created
+	"""
+
+	half = int(fixture_size[0]/2)/fixture_size[0]
+	half2 = int((fixture_size[0]-1)/2)/fixture_size[0]
+	step = 1/fixture_size[0]
+
+	fixture_food.position = np.array([0, 0])
+	fixture_snake.position = np.array([int(fixture_size[0]/2)]*2)
+
+	fixture_snake.occupied.append(fixture_snake.position)
+	fixture_snake.occupied.append(np.array([int(fixture_size[0]/2), int(fixture_size[0]/2)+2]))
+	fixture_snake.occupied.append(np.array([int(fixture_size[0]/2)-4, int(fixture_size[0]/2)]))
+
+	obstacles_answers = [half2, half, 3*step, step]
+	angles_answers = [-0.25, 0.25, 0.75, -0.75]
+	distance = np.linalg.norm(fixture_snake.position-fixture_food.position)/(fixture_size[0]*1.41421356237)
+
+	for i in range(len(fixture_snake.directions)):
+
+		fixture_snake.direction = fixture_snake.directions[i]
+		fixture_snake.get_status(fixture_size, fixture_food)
+
+		np.testing.assert_allclose(fixture_snake.status[0:3], np.roll(obstacles_answers, -i)[0:-1])
+		assert fixture_snake.status[3] == distance
+		assert fixture_snake.status[4] == angles_answers[i]
+
+
+def test_decide(fixture_snake):
+	"""
+	Tests if the correct decision is made by the neuralnetwork
+	"""
+
+	fixture_snake.neural_network = neuralnet((3, 3))
+	fixture_snake.neural_network.weights[0] = np.eye(3)
+
+	for j in range(3):
+
+		fixture_snake.status = np.zeros(3)
+		fixture_snake.status[j] = 1
+
+		for i in range(len(fixture_snake.directions)):
+
+			fixture_snake.direction = fixture_snake.directions[i]
+			fixture_snake.decide()
+
+			assert fixture_snake.direction == fixture_snake.directions[(i+j-1)%4]
