@@ -65,7 +65,7 @@ def sort_generation(generation):
 	Sorts the generation by fitness in decreasing order
 	"""
 
-	assert isinstance(generation, list)
+	assert isinstance(generation, list), "Expected a list, received a " + type(generation).__name__
 	for element in generation: assert isinstance(element, snake)
 
 	generation.sort(key=lambda snake: snake.fitness, reverse=True)

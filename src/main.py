@@ -1,10 +1,11 @@
 from game import *
+from utils import *
 import genetic_algorithm as ga
 
 
 def main():
 
-	number_of_gen = 100
+	number_of_gen = 25
 	snakes_per_gen = 100
 	shape = (5, 31, 11, 3)
 
@@ -23,10 +24,21 @@ def main():
 				G.play()
 
 		result = np.mean([sn.fitness for sn in generation])
-		print("generation", gen, ": ", result)
+		print("generation", gen+1, ": ", result)
 
 		generation = ga.create_generation(generation)
 		
+	save(generation)
+
+	generation = load()
+	generation = sort_generation(generation)
+
+	G = game()
+	G = game([10, 20], True, 1000)
+	G.add_snake(generation[0])
+
+	while G.snake.is_alive:
+		G.play()
 
 
 if __name__ == "__main__":
