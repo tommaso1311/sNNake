@@ -71,7 +71,10 @@ class snake:
 		elif isinstance(neural_network, neuralnet):
 			self.neural_network = neural_network
 			self.human = False
-		elif isinstance(neural_network, tuple):
+		elif isinstance(neural_network, list):
+			neural_network = neural_network.copy()
+			neural_network.insert(0, 5)
+			neural_network.insert(len(neural_network), 3)
 			self.neural_network = neuralnet(neural_network)
 			self.human = False
 		else:

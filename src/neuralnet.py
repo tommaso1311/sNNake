@@ -24,7 +24,9 @@ class neuralnet:
 
 	def __init__(self, shape, new=True, weights=None):
 
-		assert type(shape) is tuple, "Incorrect shape type (must be a tuple)"
+		assert type(shape) is list, "Incorrect shape type (must be a list)"
+		for e in shape:
+			assert isinstance(e, int)
 		assert len(shape) >= 2, "Incorrect shape lenght (must be at least 2)"
 		assert isinstance(new, bool), "Incorrect value for new parameter"
 

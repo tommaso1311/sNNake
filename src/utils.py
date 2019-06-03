@@ -1,11 +1,10 @@
 import pickle
 import os
 import sys
-from snake import *
 from genetic_algorithm import *
 
 
-def save(generation, filename="generation.pickle"):
+def save(generation, details, filename="generation"):
 	"""
 	Saves a snakes generation after checking if a file with same name
 	already exists (also asks for a new name before exiting)
@@ -15,6 +14,7 @@ def save(generation, filename="generation.pickle"):
 	for sn in generation:
 		assert isinstance(sn, snake)
 
+	filename = filename + ".snn"
 	path_filename = "models/" + filename
 
 	already_exists = os.path.isfile(path_filename)
@@ -25,16 +25,17 @@ def save(generation, filename="generation.pickle"):
 
 		if not answer:
 			filename = input("Please enter the new name: ")
-			save(generation, filename)
+			save(generation, details, filename)
 			exit()
 
 	with open(path_filename, "wb") as f:
 		pickle.dump(generation, f)
+		pickle.dump(details, f)
 
 	print(filename + " is correctly saved!")
 
 
-def load(filename="generation.pickle"):
+def load(filename="generation"):
 	"""
 	Loads a snakes generation
 	"""
@@ -47,12 +48,13 @@ def load(filename="generation.pickle"):
 	if exists:
 		with open(path_filename, "rb") as f:
 			generation = pickle.load(f)
+			details = pickle.load(f)
 
 		for sn in generation:
 			assert isinstance(sn, snake)
 			sn.is_alive = True
 
-		return generation
+		return generation, details
 
 	else:
 		print("Error: file not found")
