@@ -88,7 +88,7 @@ def test_decide(fixture_snake):
 	Tests if the correct decision is made by the neuralnetwork
 	"""
 
-	fixture_snake.neural_network = neuralnet((3, 3))
+	fixture_snake.neural_network = neuralnet([3, 3])
 	fixture_snake.neural_network.weights[0] = np.eye(3)
 
 	for j in range(3):
