@@ -153,26 +153,3 @@ class game:
 			self.step += 1
 		else:
 			self.snake.is_alive = False
-
-
-# def main():
-
-# 	parser = argparse.ArgumentParser()
-
-# 	parser.add_argument("-s", "--size", nargs=2, default=[40, 20],
-# 						help="specifies field size", action="store",
-# 						type=int)
-
-# 	args = parser.parse_args()
-
-# 	G = game(args.size, True)
-# 	sn = snake(human=True)
-# 	G.add_snake(sn)
-
-# 	while G.snake.is_alive:
-		
-# 		G.play()
-
-
-# if __name__ == "__main__":
-# 	main()
