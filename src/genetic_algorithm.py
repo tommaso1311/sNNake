@@ -72,7 +72,7 @@ def sort_generation(generation):
 	return generation
 
 
-def create_generation(generation, q=0.05, crossover_prob=0.95, mutation_prob=0.01):
+def create_generation(generation, snakes=10, nn=[], q=0.05, crossover_prob=0.95, mutation_prob=0.01):
 	"""
 	Creates a new generation out of the older one
 	"""
@@ -81,22 +81,32 @@ def create_generation(generation, q=0.05, crossover_prob=0.95, mutation_prob=0.0
 	assert isinstance(generation, list)
 	for element in generation: assert isinstance(element, snake)
 
-	generation = sort_generation(generation)
 
-	p = np.fromfunction(lambda r: q*(1-q)**r, shape=(len(generation),))
-	p = p/p.sum()
+	if not generation:
 
-	new_generation = []
+		for i in range(snakes):
+			generation.append(snake(nn))
 
-	for i in range(len(generation)):
+		return generation
 
-		neural_network_a = np.random.choice(generation, p=p).neural_network
-		neural_network_b = np.random.choice(generation, p=p).neural_network
+	else:
 
-		neural_network_final = neural_network_crossover(neural_network_a, neural_network_b, crossover_prob, mutation_prob)
+		generation = sort_generation(generation)
 
-		snake_final = snake(neural_network_final)
+		p = np.fromfunction(lambda r: q*(1-q)**r, shape=(len(generation),))
+		p = p/p.sum()
 
-		new_generation.append(snake_final)
+		new_generation = []
 
-	return new_generation
+		for i in range(len(generation)):
+
+			neural_network_a = np.random.choice(generation, p=p).neural_network
+			neural_network_b = np.random.choice(generation, p=p).neural_network
+
+			neural_network_final = neural_network_crossover(neural_network_a, neural_network_b, crossover_prob, mutation_prob)
+
+			snake_final = snake(neural_network_final)
+
+			new_generation.append(snake_final)
+
+		return new_generation

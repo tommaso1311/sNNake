@@ -98,8 +98,7 @@ def train(generation=[], details=None, snakes=10, nn=[], generations=1, size=[10
 
 	if not generation:
 
-		for i in range(snakes):
-			generation.append(snake(nn))
+		generation = create_generation(generation, snakes, nn)
 
 	else:
 
@@ -112,6 +111,9 @@ def train(generation=[], details=None, snakes=10, nn=[], generations=1, size=[10
 
 
 	for gen in range(generations):
+
+		generation = create_generation(generation)
+
 		for sn in generation:
 
 			g = game(size, view, end)
@@ -129,7 +131,7 @@ def train(generation=[], details=None, snakes=10, nn=[], generations=1, size=[10
 			best_result = result
 			best_index = gen
 
-		generation = create_generation(generation)
+		# generation = create_generation(generation)
 
 	print("Saving generation", best_index+1, "with a result of", best_result, "...")
 
