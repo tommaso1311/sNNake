@@ -41,7 +41,7 @@ class game:
 	"""
 
 
-	def __init__(self, size=[40, 20], view=False, duration=1e3):
+	def __init__(self, size=40, view=False, duration=1e3):
 		"""
 		Parameters
 		----------
@@ -54,7 +54,7 @@ class game:
 			max duration of the game
 		"""
 
-		self.size = np.array(size)
+		self.size = int(size)
 		self.view = view
 		self.step = 0
 		self.duration = duration
@@ -64,8 +64,8 @@ class game:
 		self.clock = pygame.time.Clock()
 
 		if self.view:
-			self.window = pygame.display.set_mode((self.size[0]*self.size[1],
-											self.size[0]*self.size[1]))
+			self.window = pygame.display.set_mode((self.size*20,
+											self.size*20))
 
 
 	def play(self):
@@ -90,7 +90,7 @@ class game:
 
 
 		# initialize position
-		self.snake.position = np.random.randint(0, self.size[0], 2)
+		self.snake.position = np.random.randint(0, self.size, 2)
 		self.snake.occupied.insert(0, self.snake.position.copy())
 
 
@@ -99,7 +99,7 @@ class game:
 		self.food = food()
 
 		# initialize position and check to not create new food in snake
-		self.food.position = np.random.randint(0, self.size[0], 2)
+		self.food.position = np.random.randint(0, self.size, 2)
 		while any((self.food.position == x).all() for x in self.snake.position):
 			self.add_food()
 
@@ -116,14 +116,14 @@ class game:
 
 		# draws food
 		pygame.draw.rect(self.window, self.food_color,
-			pygame.Rect(self.food.position[1]*self.size[1], self.food.position[0]*self.size[1],
-				self.size[1], self.size[1]))
+			pygame.Rect(self.food.position[1]*20, self.food.position[0]*20,
+				20, 20))
 
 		# draws snake
 		for coord in self.snake.occupied:
 			pygame.draw.rect(self.window, self.snake_color,
-				pygame.Rect(coord[1]*self.size[1], coord[0]*self.size[1],
-					self.size[1], self.size[1]))
+				pygame.Rect(coord[1]*20, coord[0]*20,
+					20, 20))
 
 		pygame.display.flip()
 		assert type(frequency==int)
@@ -138,8 +138,8 @@ class game:
 	def end(self):
 
 		# checks if snake is still in the field
-		if not (0 <= self.snake.position[0] < self.size[0] and
-			0 <= self.snake.position[1] < self.size[0]):
+		if not (0 <= self.snake.position[0] < self.size and
+			0 <= self.snake.position[1] < self.size):
 			self.snake.fitness -= 1
 			self.snake.is_alive = False
 

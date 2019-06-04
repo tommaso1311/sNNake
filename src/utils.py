@@ -131,8 +131,6 @@ def train(generation=[], details=None, snakes=10, nn=[], generations=1, size=[10
 			best_result = result
 			best_index = gen
 
-		# generation = create_generation(generation)
-
 	print("Saving generation", best_index+1, "with a result of", best_result, "...")
 
 	best_generation = sort_generation(best_generation)

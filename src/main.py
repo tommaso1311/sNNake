@@ -12,7 +12,7 @@ def main():
 	group.add_argument("-l", "--load", action="store_true", help="load an existing model")
 
 	parser.add_argument("-v", "--view", action="store_true")
-	parser.add_argument("-s", "--size", nargs=2, default=[10, 20],
+	parser.add_argument("-s", "--size", default=10,
 						help="specifies field size", action="store", type=int)
 	parser.add_argument("-g", "--generations", default=10,
 						help="specifies number of generations in the model", action="store",
@@ -34,7 +34,7 @@ def main():
 
 	if args.play:
 
-		G = game(args.size, True, np.inf)
+		G = game([args.size, 20], True, np.inf)
 		sn = snake(human=True)
 		G.add_snake(sn)
 
@@ -55,13 +55,16 @@ def main():
 	elif args.load:
 
 		generation, details = load(args.name)
+		print()
 		print(args.name, "correctly loaded! Model details are:")
 		print(details)
 
+		print()
 		train_answer = get_yes_no("Do you want to continue to train the model?")
 
 		if train_answer:
 
+			print()
 			generations = input("Insert number of generations to train: ")
 			assert generations.isdigit()
 			generations = int(generations)
@@ -74,10 +77,12 @@ def main():
 
 		else:
 
+			print()
 			view_answer = get_yes_no("Do you want to view the model in action?")
 			if not view_answer:
 				exit()
 
+			print()
 			best_answer = get_yes_no("Do you want to see only the best one?")
 			if best_answer:
 
