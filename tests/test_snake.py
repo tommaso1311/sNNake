@@ -58,20 +58,20 @@ def test_get_status(fixture_snake, fixture_food, fixture_size):
 	Tests correct status vector is created
 	"""
 
-	half = int(fixture_size[0]/2)/fixture_size[0]
-	half2 = int((fixture_size[0]-1)/2)/fixture_size[0]
-	step = 1/fixture_size[0]
+	half = int(fixture_size/2)/fixture_size
+	half2 = int((fixture_size-1)/2)/fixture_size
+	step = 1/fixture_size
 
 	fixture_food.position = np.array([0, 0])
-	fixture_snake.position = np.array([int(fixture_size[0]/2)]*2)
+	fixture_snake.position = np.array([int(fixture_size/2)]*2)
 
 	fixture_snake.occupied.append(fixture_snake.position)
-	fixture_snake.occupied.append(np.array([int(fixture_size[0]/2), int(fixture_size[0]/2)+2]))
-	fixture_snake.occupied.append(np.array([int(fixture_size[0]/2)-4, int(fixture_size[0]/2)]))
+	fixture_snake.occupied.append(np.array([int(fixture_size/2), int(fixture_size/2)+2]))
+	fixture_snake.occupied.append(np.array([int(fixture_size/2)-4, int(fixture_size/2)]))
 
 	obstacles_answers = [half2, half, 3*step, step]
 	angles_answers = [-0.25, 0.25, 0.75, -0.75]
-	distance = np.linalg.norm(fixture_snake.position-fixture_food.position)/(fixture_size[0]*1.41421356237)
+	distance = np.linalg.norm(fixture_snake.position-fixture_food.position)/(fixture_size*1.41421356237)
 
 	for i in range(len(fixture_snake.directions)):
 

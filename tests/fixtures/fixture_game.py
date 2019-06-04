@@ -4,4 +4,4 @@ from game import *
 @pytest.fixture
 def fixture_game(fixture_size):
 
-	return game(fixture_size[:-1], True)
+	return game(fixture_size, True)

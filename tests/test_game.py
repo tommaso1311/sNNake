@@ -7,8 +7,8 @@ def test_init_window(fixture_size, fixture_game):
 	Tests correct game window size
 	"""
 
-	assert fixture_game.window.get_size()[0] == fixture_size[2]
-	assert fixture_game.window.get_size()[1] == fixture_size[2]
+	assert fixture_game.window.get_size()[0] == fixture_size*20
+	assert fixture_game.window.get_size()[1] == fixture_size*20
 
 @pytest.mark.xfail(reason="video system not initialized")
 def test_end(fixture_game):
@@ -17,7 +17,7 @@ def test_end(fixture_game):
 	"""
 
 	positions = [np.array([-1, 0]), np.array([0, -1]),
-		np.array([fixture_game.size[0]+1, 0]), np.array([0, fixture_game.size[0]+1])]
+		np.array([fixture_game.size+1, 0]), np.array([0, fixture_game.size+1])]
 
 	fixture_game.add_snake()
 
