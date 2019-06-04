@@ -45,99 +45,65 @@ def main():
 
 	elif args.train:
 
-		generation = []
-		best_generation = []
-		best_result = -1
-		best_index = 0
+		best_generation, details = train(snakes=args.snakes, nn=args.nn,
+										generations=args.generations, size=args.size,
+										view=args.view, end=args.end)
 
-		for i in range(args.snakes):
-			generation.append(snake(args.nn))
-
-		for gen in range(args.generations):
-			for sn in generation:
-
-				g = game(args.size, args.view, args.end)
-				g.add_snake(sn)
-
-				while g.snake.is_alive:
-					g.play()
-
-			result = np.mean([x.fitness for x in generation])
-			print("generation", gen+1, "/", args.generations, ":", result)
-
-			if result > best_result:
-				best_generation = generation
-				best_result = result
-				best_index = gen
-
-			generation = create_generation(generation)
-
-		print("Saving generation", best_index+1, "with a result of", best_result, "...")
-
-		best_generation = sort_generation(best_generation)
-		details = {"trained": args.generations,
-					"game_size": args.size[0],
-					"duration": args.end,
-					"best:": best_generation[0].fitness}
-
-		save(best_generation, details, args.name+"[fitness="+str(best_result)+"]")
+		save(best_generation, details, args.name)
 		
 
 	elif args.load:
 
 		generation, details = load(args.name)
+		print(args.name, "correctly loaded! Model details are:")
 		print(details)
 
+		train_answer = get_yes_no("Do you want to continue to train the model?")
+
+		if train_answer:
+
+			generations = input("Insert number of generations to train: ")
+			assert generations.isdigit()
+			generations = int(generations)
+
+			best_generation, details = train(generation, details, generations=generations)
+
+			best_generation = sort_generation(best_generation)
+
+			save(best_generation, details, args.name)
+
+		else:
+
+			view_answer = get_yes_no("Do you want to view the model in action?")
+			if not view_answer:
+				exit()
+
+			best_answer = get_yes_no("Do you want to see only the best one?")
+			if best_answer:
+
+				g = game(details["game_size"], True, details["duration"])
+				g.add_snake(generation[0])
+
+				while g.snake.is_alive:
+					g.play()
+
+				print("Snake points are:", g.snake.fitness)
+
+			else:
+
+				for sn in generation:
+
+					g = game(details["game_size"], True, details["duration"])
+					g.add_snake(sn)
+
+					while g.snake.is_alive:
+						g.play()
+
+					print("Snake points are:", g.snake.fitness)
+			
 	else:
 
 		print("you don't want to play")
-
-	# details = {"trained": 100,
-	# 			"game size": [40, 20]}
-
-	# number_of_gen = 2
-	# snakes_per_gen = 100
-	# shape = (5, 31, 11, 3)
-
-	# generation = []
-	# for i in range(snakes_per_gen):
-	# 	generation.append(snake(shape))
-
-	# for gen in range(number_of_gen):
-
-	# 	for sn in generation:
-
-	# 		G = game([10, 20], False, 100)
-	# 		G.add_snake(sn)
-
-	# 		while G.snake.is_alive:
-	# 			G.play()
-
-	# 	result = np.mean([sn.fitness for sn in generation])
-	# 	print("generation", gen+1, ":", result)
-
-	# 	generation = ga.create_generation(generation)
-		
-	# for sn in generation:
-	# 	G = game([10, 20], False, 100)
-	# 	G.add_snake(sn)
-
-	# while G.snake.is_alive:
-	# 	G.play()
-
-	# # generation = sort_generation(generation)
-	# save(generation, details)
-
-	# generation, details = load()
-	# print(details)
-	# generation = sort_generation(generation)
-
-	# G = game()
-	# G = game([10, 20], True, 1000)
-	# G.add_snake(generation[0])
-
-	# while G.snake.is_alive:
-	# 	G.play()
 
 
 if __name__ == "__main__":
