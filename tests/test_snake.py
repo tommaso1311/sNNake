@@ -16,7 +16,6 @@ def test_init_snake(fixture_snake):
 	assert not len(fixture_snake.occupied)
 
 
-@pytest.mark.xfail(reason="video system not initialized")
 def test_move(fixture_snake, fixture_size, fixture_food):
 	"""
 	Tests correct snake movement
