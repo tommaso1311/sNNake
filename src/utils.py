@@ -15,9 +15,8 @@ def save(generation, details, filename="generation"):
 	for sn in generation:
 		assert isinstance(sn, snake)
 
-	filename = filename
+	# setting path filename and checking if it already exists
 	path_filename = "models/" + filename
-
 	already_exists = os.path.isfile(path_filename)
 
 	if already_exists:
@@ -42,8 +41,9 @@ def load(filename="generation"):
 	"""
 
 	assert isinstance(filename, str)
-	path_filename = "models/" + filename
 
+	# setting path filename and checking if it already exists
+	path_filename = "models/" + filename
 	exists = os.path.isfile(path_filename)
 
 	if exists:
@@ -54,7 +54,7 @@ def load(filename="generation"):
 		for sn in generation:
 			assert isinstance(sn, snake)
 			sn.is_alive = True
-			sn.length = 0
+			sn.length = 1
 			sn.occupied = []
 			sn.fitness = 0
 
@@ -86,12 +86,17 @@ def get_yes_no(question):
 			return True
 		else:
 			print("Please respond with yes or no")
-			print()
 
-def train(generation=[], details=None, snakes=10, nn=[], generations=1, size=[10, 10], view=False, end=100):
+
+def train(generation=[], details=None, snakes=10, nn=[], generations=1,
+	size=10, view=False, end=100):
+	"""
+	Used to train the model
+	"""
 
 	assert isinstance(generation, list)
 
+	# initializing best results
 	best_generation = []
 	best_result = -1
 	best_index = 0
@@ -109,7 +114,7 @@ def train(generation=[], details=None, snakes=10, nn=[], generations=1, size=[10
 		size = details["game_size"]
 		end = details["duration"]
 
-
+	# running the train simulation
 	for gen in range(generations):
 
 		generation = create_generation(generation)
@@ -122,10 +127,12 @@ def train(generation=[], details=None, snakes=10, nn=[], generations=1, size=[10
 			while g.snake.is_alive:
 
 				g.play()
+				if view: esc_exit()
 
 		result = np.mean([x.fitness for x in generation])
 		print("generation", gen+1, "/", generations, ":", result)
 
+		# updating best results
 		if result > best_result:
 			best_generation = generation
 			best_result = result
@@ -139,8 +146,19 @@ def train(generation=[], details=None, snakes=10, nn=[], generations=1, size=[10
 		details = {"trained": generations,
 					"game_size": size,
 					"duration": end,
-					"best:": best_generation[0].fitness}
+					"best": best_generation[0].fitness}
 	else:
 		details["trained"] += generations
 
 	return best_generation, details
+
+
+def esc_exit():
+	"""
+	Used to stop graphical representation
+	"""
+
+	events = pygame.event.get()
+	for event in events:
+		if event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_ESCAPE: quit()

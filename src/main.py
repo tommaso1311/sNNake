@@ -4,6 +4,7 @@ from utils import *
 
 def main():
 
+	# adding parser
 	parser = argparse.ArgumentParser()
 
 	group = parser.add_mutually_exclusive_group()
@@ -11,27 +12,34 @@ def main():
 	group.add_argument("-t", "--train", action="store_true", help="train a new model")
 	group.add_argument("-l", "--load", action="store_true", help="load an existing model")
 
-	parser.add_argument("-v", "--view", action="store_true")
+	parser.add_argument("-v", "--view", action="store_true", help="activate representation")
+
 	parser.add_argument("-s", "--size", default=10,
-						help="specifies field size", action="store", type=int)
+						help="specifies game size", action="store", type=int)
+
 	parser.add_argument("-g", "--generations", default=10,
-						help="specifies number of generations in the model", action="store",
-						type=int)
+						help="specifies number of generations in the trained model",
+						action="store", type=int)
+
 	parser.add_argument("-k", "--snakes", default=10,
-						help="specifies number of snakes per generation in the model", action="store",
-						type=int)
+						help="specifies number of snakes per generation in the trained model",
+						action="store",	type=int)
+
 	parser.add_argument("-n", "--nn", nargs="*", default=[],
-						help="specifies neural network hidden layers", action="store",
-						type=int)
+						help="specifies neural network hidden layers in the trained model",
+						action="store", type=int)
+
 	parser.add_argument("-e", "--end", default=100,
-						help="specifies max duration of the game", action="store",
-						type=int)
-	parser.add_argument("-m", "--name", default="generation_",
-						help="specifies name of the file with the model", action="store",
-						type=str)
+						help="specifies max duration of the game in the trained model",
+						action="store", type=int)
+
+	parser.add_argument("-m", "--name", default="generation",
+						help="specifies name of the file in which store the model",
+						action="store", type=str)
 
 	args = parser.parse_args()
 
+	# parser option for a simple game
 	if args.play:
 
 		G = game(args.size, True, np.inf)
@@ -40,9 +48,11 @@ def main():
 
 		while G.snake.is_alive:
 			G.play()
+			esc_exit()
 
 		print("Your total points are:", G.snake.fitness+1)
 
+	# parser option to train a model
 	elif args.train:
 
 		best_generation, details = train(snakes=args.snakes, nn=args.nn,
@@ -51,7 +61,7 @@ def main():
 
 		save(best_generation, details, args.name)
 		
-
+	# parser option to load an existing model
 	elif args.load:
 
 		generation, details = load(args.name)
@@ -69,7 +79,8 @@ def main():
 			assert generations.isdigit()
 			generations = int(generations)
 
-			best_generation, details = train(generation, details, generations=generations)
+			best_generation, details = train(generation, details, generations=generations,
+											view=args.view)
 
 			best_generation = sort_generation(best_generation)
 
@@ -91,6 +102,7 @@ def main():
 
 				while g.snake.is_alive:
 					g.play()
+					esc_exit()
 
 				print("Snake points are:", g.snake.fitness)
 
@@ -103,12 +115,13 @@ def main():
 
 					while g.snake.is_alive:
 						g.play()
+						esc_exit()
 
 					print("Snake points are:", g.snake.fitness)
 			
 	else:
 
-		print("you don't want to play")
+		print("Please run with --help flag to see available options")
 
 
 if __name__ == "__main__":

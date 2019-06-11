@@ -23,6 +23,19 @@ class neuralnet:
 	"""
 
 	def __init__(self, shape, new=True, weights=None):
+		"""
+		Parameters
+		----------
+		shape : tuple
+			shape of the neural network
+			shape[0] is the number of inputs
+			shape[-1] is the number of outputs
+			shape[1:-1] are the number of perceptrons for each layer
+		new : bool
+			tells if the neural network is new
+		weights : list || None
+			list of neural weights between each layer
+		"""
 
 		assert type(shape) is list, "Incorrect shape type (must be a list)"
 		for e in shape:
@@ -74,6 +87,7 @@ class neuralnet:
 
 		for i in range(len(outputs)-1):
 
+			# matrix multiplication between each element
 			outputs[i+1] = np.tanh(outputs[i+1]@outputs[i])
 
 		return outputs[-1]

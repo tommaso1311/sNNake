@@ -74,7 +74,7 @@ def sort_generation(generation):
 
 def create_generation(generation, snakes=10, nn=[], q=0.05, crossover_prob=0.95, mutation_prob=0.01):
 	"""
-	Creates a new generation out of the older one
+	Creates a new generation out of the previous one
 	"""
 
 	assert 1 >= q >= 0
@@ -93,6 +93,7 @@ def create_generation(generation, snakes=10, nn=[], q=0.05, crossover_prob=0.95,
 
 		generation = sort_generation(generation)
 
+		# creating the probability vector
 		p = np.fromfunction(lambda r: q*(1-q)**r, shape=(len(generation),))
 		p = p/p.sum()
 
