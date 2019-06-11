@@ -137,6 +137,11 @@ class snake:
 		if len(self.occupied) > self.length:
 			del self.occupied[-1]
 
+		events = pygame.event.get()
+		for event in events:
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_ESCAPE: quit()
+
 
 	def eat_not(self, food_obj):
 		"""

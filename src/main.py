@@ -34,7 +34,7 @@ def main():
 
 	if args.play:
 
-		G = game([args.size, 20], True, np.inf)
+		G = game(args.size, True, np.inf)
 		sn = snake(human=True)
 		G.add_snake(sn)
 
