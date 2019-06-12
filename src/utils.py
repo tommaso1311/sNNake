@@ -11,9 +11,10 @@ def save(generation, details, filename="generation"):
 	already exists (also asks for a new name before exiting)
 	"""
 
-	assert isinstance(filename, str)
+	assert isinstance(filename, str), "Expected a string, received a " + type(filename).__name__
 	for sn in generation:
-		assert isinstance(sn, snake)
+		assert isinstance(sn, snake), "Expected a snake, received a " + type(snake).__name__
+	assert isinstance(details, dict), "Expected a dictionary, received a " + type(details).__name__
 
 	# setting path filename and checking if it already exists
 	path_filename = "models/" + filename
@@ -40,7 +41,7 @@ def load(filename="generation"):
 	Loads a snakes generation
 	"""
 
-	assert isinstance(filename, str)
+	assert isinstance(filename, str), "Expected a string, received a " + type(filename).__name__
 
 	# setting path filename and checking if it already exists
 	path_filename = "models/" + filename
@@ -70,7 +71,7 @@ def get_yes_no(question):
 	Used to get a yes or no answer
 	"""
 
-	assert isinstance(question, str)
+	assert isinstance(question, str), "Expected a string, received a " + type(question).__name__
 
 	yes = {"yes", "y", "ye"}
 	no = {"no", "n"}
@@ -85,16 +86,23 @@ def get_yes_no(question):
 		elif answer in yes:
 			return True
 		else:
-			print("Please respond with yes or no")
+			print("Please respond with yes or no!")
 
 
-def train(generation=[], details=None, snakes=10, nn=[], generations=1,
+def train(generation=[], details={}, snakes=10, shape=[], generations=1,
 	size=10, view=False, end=100):
 	"""
 	Used to train the model
 	"""
 
-	assert isinstance(generation, list)
+	assert isinstance(generation, list), "Expected a list, received a " + type(generation).__name__
+	assert isinstance(details, dict), "Expected a dict, received a " + type(details).__name__
+	assert isinstance(snakes, int), "Expected an int, received a " + type(snakes).__name__
+	assert isinstance(shape, list), "Expected a string, received a " + type(shape).__name__
+	assert isinstance(generations, int), "Expected an int, received a " + type(generations).__name__
+	assert isinstance(size, int), "Expected an int, received a " + type(size).__name__
+	assert isinstance(view, bool), "Expected a bool, received a " + type(view).__name__
+	assert isinstance(end, int), "Expected an int, received a " + type(end).__name__
 
 	# initializing best results
 	best_generation = []
@@ -103,12 +111,12 @@ def train(generation=[], details=None, snakes=10, nn=[], generations=1,
 
 	if not generation:
 
-		generation = create_generation(generation, snakes, nn)
+		generation = create_generation(generation, snakes, shape)
 
 	else:
 
-		for el in generation:
-			assert isinstance(el, snake)
+		for e in generation:
+			assert isinstance(e, snake), "Expected a snake, received a " + type(e).__name__
 
 		snakes = len(generation)
 		size = details["game_size"]
@@ -142,7 +150,7 @@ def train(generation=[], details=None, snakes=10, nn=[], generations=1,
 
 	best_generation = sort_generation(best_generation)
 
-	if details == None:
+	if not bool(details):
 		details = {"trained": generations,
 					"game_size": size,
 					"duration": end,

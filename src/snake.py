@@ -63,7 +63,7 @@ class snake:
 			if it is a neuralnet object, copies the neural network
 		"""
 
-		assert isinstance(human, bool)
+		assert isinstance(human, bool), "Expected a bool, received a " + type(human).__name__
 
 		if neural_network == None:
 			self.neural_network = None
@@ -120,8 +120,8 @@ class snake:
 
 		elif self.neural_network != None:
 
-			assert isinstance(game_size, int), "game_size is not an array"
-			assert isinstance(food_obj, food), "food_obj is not a food object"
+			assert isinstance(game_size, int), "Expected an int, received a " + type(game_size).__name__
+			assert isinstance(food_obj, food), "Expected a food objects, received a " + type(food_obj).__name__
 
 			self.get_status(game_size, food_obj)
 			self.decide()
@@ -145,7 +145,7 @@ class snake:
 		food : food object
 		"""
 
-		assert isinstance(food_obj, food), "food_obj is not a food object"
+		assert isinstance(food_obj, food), "Expected a food objects, received a " + type(food_obj).__name__
 
 		# update length and fitness if food is eaten
 		if (self.position == food_obj.position).all():
@@ -164,8 +164,8 @@ class snake:
 		food_obj : food object
 		"""
 
-		assert isinstance(game_size, int), "game_size is not an array"
-		assert isinstance(food_obj, food), "food_obj is not a food object"
+		assert isinstance(game_size, int), "Expected an int, received a " + type(game_size).__name__
+		assert isinstance(food_obj, food), "Expected a food objects, received a " + type(food_obj).__name__
 
 		self.status = np.zeros(5)
 

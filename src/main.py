@@ -55,7 +55,7 @@ def main():
 	# parser option to train a model
 	elif args.train:
 
-		best_generation, details = train(snakes=args.snakes, nn=args.nn,
+		best_generation, details = train(snakes=args.snakes, shape=args.nn,
 										generations=args.generations, size=args.size,
 										view=args.view, end=args.end)
 

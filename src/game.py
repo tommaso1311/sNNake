@@ -54,6 +54,10 @@ class game:
 			max duration of the game
 		"""
 
+		assert isinstance(size, (int, float)), "Expected an int or a float, received a " + type(size).__name__
+		assert isinstance(view, bool), "Expected a bool, received a " + type(view).__name__
+		assert isinstance(duration, (int, float)), "Expected a int or a float, received a " + type(duration).__name__
+
 		self.size = int(size)
 		self.view = view
 		self.step = 0
@@ -84,8 +88,8 @@ class game:
 
 		if ext_snake == None:
 			self.snake = snake()
-			assert self.snake.is_alive
 		else:
+			assert isinstance(ext_snake, snake), "Expected a snake, received a " + type(ext_snake).__name__
 			self.snake = ext_snake
 
 		# initialize position
@@ -111,6 +115,8 @@ class game:
 			refreshes per second
 		"""
 
+		assert isinstance(frequency, (int, float)), "Expected an int or a float, received a " + type(frequency).__name__
+
 		self.window.fill(self.background_color)
 
 		# drawing food
@@ -126,7 +132,6 @@ class game:
 
 		pygame.display.flip()
 
-		assert type(frequency==int)
 		self.clock.tick(frequency)
 
 

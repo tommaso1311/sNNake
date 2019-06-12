@@ -37,11 +37,11 @@ class neuralnet:
 			list of neural weights between each layer
 		"""
 
-		assert type(shape) is list, "Incorrect shape type (must be a list)"
+		assert isinstance(shape, list), "Expected a list, received a " + type(shape).__name__
 		for e in shape:
-			assert isinstance(e, int)
+			assert isinstance(e, int), "Expected an int, received a " + type(e).__name__
 		assert len(shape) >= 2, "Incorrect shape lenght (must be at least 2)"
-		assert isinstance(new, bool), "Incorrect value for new parameter"
+		assert isinstance(new, bool), "Expected a bool, received a " + type(new).__name__
 
 		self.shape = shape
 		self.weights = []
@@ -49,12 +49,12 @@ class neuralnet:
 		if new:
 			self.weights = self.weights_creator()
 		else:
-			assert isinstance(weights, list)
-			assert len(weights) == len(shape)-1
+			assert isinstance(weights, list), "Expected a list, received a " + type(weights).__name__
+			assert len(weights) == len(shape)-1, "Incorrect weights length"
 			for element in weights:
-				assert isinstance(element, np.ndarray)
+				assert isinstance(element, np.ndarray), "Expected a np.ndarray, received a " + type(element).__name__
 			for i in range(len(shape)-1):
-				assert weights[i].shape == (shape[i+1], shape[i])
+				assert weights[i].shape == (shape[i+1], shape[i]), "Incorrect weights shape"
 
 			self.weights = weights
 
@@ -79,8 +79,8 @@ class neuralnet:
 			array of input to feed to the neural network
 		"""
 
-		assert len(inputs.shape) == 1
-		assert inputs.shape[0] == self.weights[0].shape[1]
+		assert len(inputs.shape) == 1, "Incorrect input shape"
+		assert inputs.shape[0] == self.weights[0].shape[1], "Incorrect input or weights shape"
 
 		outputs = self.weights.copy()
 		outputs.insert(0, inputs)
