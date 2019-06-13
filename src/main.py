@@ -8,13 +8,13 @@ def main():
 	parser = argparse.ArgumentParser()
 
 	group = parser.add_mutually_exclusive_group()
-	group.add_argument("-p", "--play", action="store_true", help="play a new game")
+	group.add_argument("-p", "--play", action="store_true", help="play the base game")
 	group.add_argument("-t", "--train", action="store_true", help="train a new model")
 	group.add_argument("-l", "--load", action="store_true", help="load an existing model")
 
-	parser.add_argument("-v", "--view", action="store_true", help="activate representation")
+	parser.add_argument("-v", "--view", action="store_true", help="activate window representation")
 
-	parser.add_argument("-s", "--size", default=10,
+	parser.add_argument("-s", "--size", default=20,
 						help="specifies game size", action="store", type=int)
 
 	parser.add_argument("-g", "--generations", default=10,
