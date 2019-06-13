@@ -17,6 +17,10 @@ def save(generation, details, filename="generation"):
 	assert isinstance(details, dict), "Expected a dictionary, received a " + type(details).__name__
 
 	# setting path filename and checking if it already exists
+
+	if not os.path.exists("models"):
+		os.mkdir('models')
+
 	path_filename = "models/" + filename
 	already_exists = os.path.isfile(path_filename)
 
@@ -27,7 +31,7 @@ def save(generation, details, filename="generation"):
 		if not answer:
 			filename = input("Please enter the new name: ")
 			save(generation, details, filename)
-			exit()
+			exit()		
 
 	with open(path_filename, "wb") as f:
 		pickle.dump(generation, f)

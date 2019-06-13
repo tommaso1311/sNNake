@@ -2,6 +2,12 @@
 
 Evolving **neural networks** using **genetic algorithm**.
 
+## Description
+
+**sNNake** is the final exam project I wrote for the course of Data Analysis for Applied Physics and corrected and improved for the course Software and Computing for Applied Physics.
+
+The project consists in creating the popular game snake and adding a neural network to play it. This network is then evolved using a genetic algorithm to play better at each iteration.
+
 ## Build and Libraries
 
 <table>
@@ -23,11 +29,6 @@ Evolving **neural networks** using **genetic algorithm**.
 <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Pygame_logo.gif" height=75/>
 </div>
 
-## Description
-
-**sNNake** is the final exam project I wrote for the course of Data Analysis for Applied Physics and corrected and improved for the course Software and Computing for Applied Physics.
-
-The project consists in creating the popular game snake and adding a neural network to play it. This network is then evolved using a genetic algorithm to play better at each iteration.
 
 ## Installation
 Since the project is not a package, the only way to install it is by download or cloning it, via the proper button or the command line (if **git** is installed):
