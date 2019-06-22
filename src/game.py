@@ -1,4 +1,7 @@
-from snake import *
+import snake
+import food
+import pygame
+import numpy as np
 
 
 class game:
@@ -87,9 +90,9 @@ class game:
 	def add_snake(self, ext_snake=None):
 
 		if ext_snake == None:
-			self.snake = snake()
+			self.snake = snake.snake()
 		else:
-			assert isinstance(ext_snake, snake), "Expected a snake, received a " + type(ext_snake).__name__
+			assert isinstance(ext_snake, snake.snake), "Expected a snake, received a " + type(ext_snake).__name__
 			self.snake = ext_snake
 
 		# initialize position
@@ -99,7 +102,7 @@ class game:
 
 	def add_food(self):
 
-		self.food = food()
+		self.food = food.food()
 
 		# initialize position and check to not create new food in snake
 		self.food.position = np.random.randint(0, self.size, 2)

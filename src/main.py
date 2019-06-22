@@ -1,5 +1,9 @@
-from game import *
-from utils import *
+import game
+import utils
+import genetic_algorithm as ga
+import numpy as np
+import snake
+import argparse
 
 
 def main():
@@ -42,35 +46,35 @@ def main():
 	# parser option for a simple game
 	if args.play:
 
-		G = game(args.size, True, np.inf)
-		sn = snake(human=True)
+		G = game.game(args.size, True, np.inf)
+		sn = snake.snake(human=True)
 		G.add_snake(sn)
 
 		while G.snake.is_alive:
 			G.play()
-			esc_exit()
+			utils.esc_exit()
 
 		print("Your total points are:", G.snake.fitness+1)
 
 	# parser option to train a model
 	elif args.train:
 
-		best_generation, details = train(snakes=args.snakes, shape=args.nn,
+		best_generation, details = utils.train(snakes=args.snakes, shape=args.nn,
 										generations=args.generations, size=args.size,
 										view=args.view, end=args.end)
 
-		save(best_generation, details, args.name)
+		utils.save(best_generation, details, args.name)
 		
 	# parser option to load an existing model
 	elif args.load:
 
-		generation, details = load(args.name)
+		generation, details = utils.load(args.name)
 		print()
 		print(args.name, "correctly loaded! Model details are:")
 		print(details)
 
 		print()
-		train_answer = get_yes_no("Do you want to continue to train the model?")
+		train_answer = utils.get_yes_no("Do you want to continue to train the model?")
 
 		if train_answer:
 
@@ -79,30 +83,30 @@ def main():
 			assert generations.isdigit()
 			generations = int(generations)
 
-			best_generation, details = train(generation, details, generations=generations,
+			best_generation, details = utils.train(generation, details, generations=generations,
 											view=args.view)
 
-			best_generation = sort_generation(best_generation)
+			best_generation = ga.sort_generation(best_generation)
 
-			save(best_generation, details, args.name)
+			utils.save(best_generation, details, args.name)
 
 		else:
 
 			print()
-			view_answer = get_yes_no("Do you want to view the model in action?")
+			view_answer = utils.get_yes_no("Do you want to view the model in action?")
 			if not view_answer:
 				exit()
 
 			print()
-			best_answer = get_yes_no("Do you want to see only the best one?")
+			best_answer = utils.get_yes_no("Do you want to see only the best one?")
 			if best_answer:
 
-				g = game(details["game_size"], True, details["duration"])
+				g = game.game(details["game_size"], True, details["duration"])
 				g.add_snake(generation[0])
 
 				while g.snake.is_alive:
 					g.play()
-					esc_exit()
+					utils.esc_exit()
 
 				print("Snake points are:", g.snake.fitness)
 
@@ -110,12 +114,12 @@ def main():
 
 				for sn in generation:
 
-					g = game(details["game_size"], True, details["duration"])
+					g = game.game(details["game_size"], True, details["duration"])
 					g.add_snake(sn)
 
 					while g.snake.is_alive:
 						g.play()
-						esc_exit()
+						utils.esc_exit()
 
 					print("Snake points are:", g.snake.fitness)
 			

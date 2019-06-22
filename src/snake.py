@@ -5,8 +5,8 @@ import pygame
 import argparse
 import sys
 import random
-from food import *
-from neuralnet import *
+import food
+import neuralnet
 
 
 class snake:
@@ -68,14 +68,14 @@ class snake:
 		if neural_network == None:
 			self.neural_network = None
 			self.human = human
-		elif isinstance(neural_network, neuralnet):
+		elif isinstance(neural_network, neuralnet.neuralnet):
 			self.neural_network = neural_network
 			self.human = False
 		elif isinstance(neural_network, list):
 			neural_network = neural_network.copy()
 			neural_network.insert(0, 5)
 			neural_network.insert(len(neural_network), 3)
-			self.neural_network = neuralnet(neural_network)
+			self.neural_network = neuralnet.neuralnet(neural_network)
 			self.human = False
 		else:
 			raise ValueError(("Error: neural_network is neither a neuralnet object nor a tuple!"))
@@ -121,7 +121,7 @@ class snake:
 		elif self.neural_network != None:
 
 			assert isinstance(game_size, int), "Expected an int, received a " + type(game_size).__name__
-			assert isinstance(food_obj, food), "Expected a food objects, received a " + type(food_obj).__name__
+			assert isinstance(food_obj, food.food), "Expected a food objects, received a " + type(food_obj).__name__
 
 			self.get_status(game_size, food_obj)
 			self.decide()
@@ -145,7 +145,7 @@ class snake:
 		food : food object
 		"""
 
-		assert isinstance(food_obj, food), "Expected a food objects, received a " + type(food_obj).__name__
+		assert isinstance(food_obj, food.food), "Expected a food objects, received a " + type(food_obj).__name__
 
 		# update length and fitness if food is eaten
 		if (self.position == food_obj.position).all():
@@ -165,7 +165,7 @@ class snake:
 		"""
 
 		assert isinstance(game_size, int), "Expected an int, received a " + type(game_size).__name__
-		assert isinstance(food_obj, food), "Expected a food objects, received a " + type(food_obj).__name__
+		assert isinstance(food_obj, food.food), "Expected a food objects, received a " + type(food_obj).__name__
 
 		self.status = np.zeros(5)
 

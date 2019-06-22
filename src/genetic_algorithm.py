@@ -1,4 +1,6 @@
-from snake import *
+import snake
+import neuralnet
+import numpy as np
 
 
 def neural_network_crossover(neural_network_a, neural_network_b, crossover_prob=0.95, mutation_prob=0.01):
@@ -17,8 +19,8 @@ def neural_network_crossover(neural_network_a, neural_network_b, crossover_prob=
 		probability of mutation
 	"""
 
-	assert isinstance(neural_network_a, neuralnet), "Expected a neuralnet, received a " + type(neural_network_a).__name__
-	assert isinstance(neural_network_b, neuralnet), "Expected a neuralnet, received a " + type(neural_network_b).__name__
+	assert isinstance(neural_network_a, neuralnet.neuralnet), "Expected a neuralnet, received a " + type(neural_network_a).__name__
+	assert isinstance(neural_network_b, neuralnet.neuralnet), "Expected a neuralnet, received a " + type(neural_network_b).__name__
 	assert neural_network_a.shape == neural_network_b.shape, "Neural networks don't have the same shape"
 	assert 1 >= crossover_prob >= 0, "Wrong crossover probability value: not between 0 and 1"
 	assert 1 >= mutation_prob >= 0, "Wrong mutation probability value: not between 0 and 1"
@@ -54,7 +56,7 @@ def neural_network_crossover(neural_network_a, neural_network_b, crossover_prob=
 		else:
 			weights.append(neural_network_b_genes.reshape(neural_network_b.weights[i].shape))
  
-	neuralnet_final = neuralnet(neural_network_a.shape, False, weights)
+	neuralnet_final = neuralnet.neuralnet(neural_network_a.shape, False, weights)
 
 	return neuralnet_final
 
@@ -66,7 +68,7 @@ def sort_generation(generation):
 
 	assert isinstance(generation, list), "Expected a list, received a " + type(generation).__name__
 	for element in generation:
-		assert isinstance(element, snake), "Expected a snake, received a " + type(element).__name__
+		assert isinstance(element, snake.snake), "Expected a snake, received a " + type(element).__name__
 
 	generation.sort(key=lambda snake: snake.fitness, reverse=True)
 
@@ -82,12 +84,12 @@ def create_generation(generation, snakes=10, nn=[], q=0.05, crossover_prob=0.95,
 	assert 1 >= q >= 0, "Wrong choose element probability value: not between 0 and 1"
 	assert isinstance(generation, list), "Expected a list, received a " + type(generation).__name__
 	for element in generation:
-		assert isinstance(element, snake), "Expected a snake, received a " + type(snake).__name__
+		assert isinstance(element, snake.snake), "Expected a snake, received a " + type(element).__name__
 
 	if not generation:
 
 		for i in range(snakes):
-			generation.append(snake(nn))
+			generation.append(snake.snake(nn))
 
 		return generation
 
@@ -108,7 +110,7 @@ def create_generation(generation, snakes=10, nn=[], q=0.05, crossover_prob=0.95,
 
 			neural_network_final = neural_network_crossover(neural_network_a, neural_network_b, crossover_prob, mutation_prob)
 
-			snake_final = snake(neural_network_final)
+			snake_final = snake.snake(neural_network_final)
 
 			new_generation.append(snake_final)
 

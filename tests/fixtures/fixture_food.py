@@ -1,6 +1,6 @@
 import pytest
-from food import *
+import food
 
 @pytest.fixture
 def fixture_food():
-	return food()
+	return food.food()

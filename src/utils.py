@@ -1,8 +1,11 @@
 import pickle
 import os
 import sys
-from genetic_algorithm import *
-from game import *
+import genetic_algorithm as ga
+import game
+import pygame
+import numpy as np
+import snake
 
 
 def save(generation, details, filename="generation"):
@@ -13,7 +16,7 @@ def save(generation, details, filename="generation"):
 
 	assert isinstance(filename, str), "Expected a string, received a " + type(filename).__name__
 	for sn in generation:
-		assert isinstance(sn, snake), "Expected a snake, received a " + type(snake).__name__
+		assert isinstance(sn, snake.snake), "Expected a snake, received a " + type(snake).__name__
 	assert isinstance(details, dict), "Expected a dictionary, received a " + type(details).__name__
 
 	# setting path filename and checking if it already exists
@@ -57,7 +60,7 @@ def load(filename="generation"):
 			details = pickle.load(f)
 
 		for sn in generation:
-			assert isinstance(sn, snake)
+			assert isinstance(sn, snake.snake)
 			sn.is_alive = True
 			sn.length = 1
 			sn.occupied = []
@@ -115,12 +118,12 @@ def train(generation=[], details={}, snakes=10, shape=[], generations=1,
 
 	if not generation:
 
-		generation = create_generation(generation, snakes, shape)
+		generation = ga.create_generation(generation, snakes, shape)
 
 	else:
 
 		for e in generation:
-			assert isinstance(e, snake), "Expected a snake, received a " + type(e).__name__
+			assert isinstance(e, snake.snake), "Expected a snake, received a " + type(e).__name__
 
 		snakes = len(generation)
 		size = details["game_size"]
@@ -129,11 +132,11 @@ def train(generation=[], details={}, snakes=10, shape=[], generations=1,
 	# running the train simulation
 	for gen in range(generations):
 
-		generation = create_generation(generation)
+		generation = ga.create_generation(generation)
 
 		for sn in generation:
 
-			g = game(size, view, end)
+			g = game.game(size, view, end)
 			g.add_snake(sn)
 
 			while g.snake.is_alive:
@@ -152,7 +155,7 @@ def train(generation=[], details={}, snakes=10, shape=[], generations=1,
 
 	print("Saving generation", best_index+1, "with a result of", best_result, "...")
 
-	best_generation = sort_generation(best_generation)
+	best_generation = ga.sort_generation(best_generation)
 
 	if not bool(details):
 		details = {"trained": generations,
