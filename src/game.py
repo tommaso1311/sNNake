@@ -39,7 +39,7 @@ class game:
 		creates new food
 	_represent(frequency=30)
 		depicts the game window
-	end()
+	_is_over()
 		checks if the snake is still in the field or if it has
 		eaten itself
 	"""
@@ -79,7 +79,7 @@ class game:
 
 		self._add_food()
 
-		while self.snake.is_alive and self.snake.eat_not(self.food):
+		while self.snake.is_alive and self.snake.has_not_eaten_food(self.food):
 
 			self._is_over()
 			self.snake.move(self.size, self.food)
@@ -121,7 +121,7 @@ class game:
 
 		assert isinstance(frequency, (int, float)), "Expected an int or a float, received a " + type(frequency).__name__
 
-		self.window.fill(self._background_color)
+		self._window.fill(self._background_color)
 
 		# drawing food
 		pygame.draw.rect(self._window, self._food_color,

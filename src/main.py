@@ -46,15 +46,15 @@ def main():
 	# parser option for a simple game
 	if args.play:
 
-		G = game.game(args.size, True, np.inf)
+		g = game.game(args.size, True, np.inf)
 		sn = snake.snake(human=True)
-		G.add_snake(sn)
+		g.add_snake(sn)
 
-		while G.snake.is_alive:
-			G.play()
+		while g.snake.is_alive:
+			g.play()
 			utils.esc_exit()
 
-		print("Your total points are:", G.snake.fitness+1)
+		print("Your total points are:", g.snake.fitness+1)
 
 	# parser option to train a model
 	elif args.train:

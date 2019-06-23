@@ -15,7 +15,7 @@ class snake:
 
 	Attributes
 	----------
-	human : bool
+	_human : bool
 		tells if the snake is controlled by user or neural network
 	neural_network : neuralnet
 		neural network from neuralnet
@@ -27,9 +27,9 @@ class snake:
 		tells if the snake is alive
 	position : array
 		position of the snake
-	directions : list
+	_directions : list
 		list of possibile directions
-	direction : character
+	_direction : character
 		direction in which the snake is moving
 	occupied : list
 		list of coordinates occupied
@@ -42,12 +42,18 @@ class snake:
 	-------
 	move(game_size, food_obj)
 		gets inputs and moves the snake
-	eat_not(food_obj)
+	has_not_eaten_food(food_obj)
 		checks if the snake has eaten food
-	get_status(game_size, food_obj)
+	_get_status(game_size, food_obj)
 		gets the status vector
-	decide()
+	_decide()
 		changes direction based on neural network outputs
+	has_exited()
+		checks if the snake has exited the game window
+	has_eaten_himself()
+		checks if the snake has eaten himself
+	dies()
+		kills the snake and subtract 1 from fitness
 	"""
 
 
@@ -67,16 +73,16 @@ class snake:
 
 		if neural_network == None:
 			self.neural_network = None
-			self.human = human
+			self._human = human
 		elif isinstance(neural_network, neuralnet.neuralnet):
 			self.neural_network = neural_network
-			self.human = False
+			self._human = False
 		elif isinstance(neural_network, list):
 			neural_network = neural_network.copy()
 			neural_network.insert(0, 5)
 			neural_network.insert(len(neural_network), 3)
 			self.neural_network = neuralnet.neuralnet(neural_network)
-			self.human = False
+			self._human = False
 		else:
 			raise ValueError(("Error: neural_network is neither a neuralnet object nor a tuple!"))
 
@@ -86,8 +92,8 @@ class snake:
 		self.is_alive = True
 		self.position = None
 
-		self.directions = ['L', 'U', 'R', 'D']
-		self.direction = random.choice(self.directions)
+		self._directions = ['L', 'U', 'R', 'D']
+		self._direction = random.choice(self._directions)
 		self.occupied = []
 
 		self.status = None
@@ -101,21 +107,21 @@ class snake:
 		food_obj : food object
 		"""
 
-		if self.human:
+		if self._human:
 
 			events = pygame.event.get()
 
 			# listens to key pressure
 			for event in events:
 				if event.type == pygame.KEYDOWN:
-					if event.key == pygame.K_UP and self.direction is not 'D':
-						self.direction = 'U'
-					elif event.key == pygame.K_RIGHT and self.direction is not 'L':
-						self.direction = 'R'
-					elif event.key == pygame.K_DOWN and self.direction is not 'U':
-						self.direction = 'D'
-					elif event.key == pygame.K_LEFT and self.direction is not 'R':
-						self.direction = 'L'
+					if event.key == pygame.K_UP and self._direction is not 'D':
+						self._direction = 'U'
+					elif event.key == pygame.K_RIGHT and self._direction is not 'L':
+						self._direction = 'R'
+					elif event.key == pygame.K_DOWN and self._direction is not 'U':
+						self._direction = 'D'
+					elif event.key == pygame.K_LEFT and self._direction is not 'R':
+						self._direction = 'L'
 					elif event.key == pygame.K_ESCAPE: quit()
 
 		elif self.neural_network != None:
@@ -123,13 +129,13 @@ class snake:
 			assert isinstance(game_size, int), "Expected an int, received a " + type(game_size).__name__
 			assert isinstance(food_obj, food.food), "Expected a food objects, received a " + type(food_obj).__name__
 
-			self.get_status(game_size, food_obj)
-			self.decide()
+			self._get_status(game_size, food_obj)
+			self._decide()
 
 		# upgrade the position
-		if self.direction == 'U': self.position[0] -= 1
-		elif self.direction == 'R': self.position[1] += 1
-		elif self.direction == 'D': self.position[0] += 1
+		if self._direction == 'U': self.position[0] -= 1
+		elif self._direction == 'R': self.position[1] += 1
+		elif self._direction == 'D': self.position[0] += 1
 		else: self.position[1] -= 1
 
 		# upgrade occupied list
@@ -138,7 +144,7 @@ class snake:
 			del self.occupied[-1]
 
 
-	def eat_not(self, food_obj):
+	def has_not_eaten_food(self, food_obj):
 		"""
 		Parameters
 		----------
@@ -156,7 +162,35 @@ class snake:
 			return True
 
 
-	def get_status(self, game_size, food_obj):
+	def has_eaten_himself(self):
+
+		if any((self.position == x).all() for x in self.occupied[1:]):
+			return True
+		else:
+			return False
+
+
+	def has_exited(self, size):
+		"""
+		Parameters
+		----------
+		size : number
+			size of the game window
+		"""
+
+		if not (0<=self.position[0]<size and 0<=self.position[1]<size):
+			return True
+		else:
+			return False
+
+
+	def dies(self):
+
+		self.fitness -= 1
+		self.is_alive = False
+
+
+def _get_status(self, game_size, food_obj):
 		"""
 		Parameters
 		----------
@@ -195,7 +229,7 @@ class snake:
 
 		# reducing the size of the vector removing the information regarding the direction
 		# opposed to the movement
-		index = (self.directions.index(self.direction)+2) % 4
+		index = (self._directions.index(self._direction)+2) % 4
 		seen = np.delete(seen, index)
 		seen = np.roll(seen, -index)
 
@@ -209,36 +243,14 @@ class snake:
 		self.status[4] = np.arctan2(coords[index%4], coords[(index+1)%4])/np.pi
 
 
-	def decide(self):
+	def _decide(self):
 			
 		out = self.neural_network.get_output(self.status)
 		max_index = out.argmax(axis=0)
-		direction_index = self.directions.index(self.direction)
+		direction_index = self._directions.index(self._direction)
 
 		# changing direction based on the neural network result
 		if max_index == 0:
-			self.direction = self.directions[(direction_index-1) % 4]
+			self._direction = self._directions[(direction_index-1) % 4]
 		elif max_index == 2:
-			self.direction = self.directions[(direction_index+1) % 4]
-
-
-	def has_eaten_himself(self):
-
-		if any((self.position == x).all() for x in self.occupied[1:]):
-			return True
-		else:
-			return False
-
-
-	def has_exited(self, size):
-
-		if not (0<=self.position[0]<size and 0<=self.position[1]<size):
-			return True
-		else:
-			return False
-
-
-	def dies(self):
-
-		self.fitness -= 1
-		self.is_alive = False
+			self._direction = self._directions[(direction_index+1) % 4]
