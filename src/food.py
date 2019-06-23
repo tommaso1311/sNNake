@@ -1,3 +1,5 @@
+import numpy as np
+
 class food:
 
 	def __init__(self):
@@ -10,4 +12,4 @@ class food:
 			position of food
 		"""
 
-		self.position = None
+		self.position = np.array([0, 0])

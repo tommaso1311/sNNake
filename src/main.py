@@ -4,6 +4,7 @@ import genetic_algorithm as ga
 import numpy as np
 import snake
 import argparse
+import human
 
 
 def main():
@@ -47,7 +48,7 @@ def main():
 	if args.play:
 
 		g = game.game(args.size, True, np.inf)
-		sn = snake.snake(human=True)
+		sn = snake.snake(human.human())
 		g.add_snake(sn)
 
 		while g.snake.is_alive:

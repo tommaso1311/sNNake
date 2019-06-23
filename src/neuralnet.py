@@ -20,6 +20,8 @@ class neuralnet:
 		creates a new list with random weights between -1 and 1
 	get_output(inputs)
 		computes weights matrices product to get neural network output
+	decide(direction, status, directions)
+		decides the new direction
 	"""
 
 	def __init__(self, shape, new=True, weights=None):
@@ -101,3 +103,28 @@ class neuralnet:
 			outputs[i+1] = np.tanh(outputs[i+1]@outputs[i])
 
 		return outputs[-1]
+
+
+	def decide(self, direction, status, directions=['L', 'U', 'R', 'D']):
+		"""
+		Parameters
+		----------
+		direction : str
+			current direction
+		status : array
+			input vector
+		directions : list of str
+			available directions
+		"""
+
+		out = self.get_output(status)
+		max_index = out.argmax(axis=0)
+		direction_index = directions.index(direction)
+
+		# changing direction based on the neural network result
+		if max_index == 0:
+			direction = directions[(direction_index-1) % 4]
+		elif max_index == 2:
+			direction = directions[(direction_index+1) % 4]
+
+		return direction

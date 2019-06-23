@@ -81,27 +81,6 @@ def test_get_status(fixture_snake, fixture_food, fixture_size):
 		assert fixture_snake.status[4] == angles_answers[i]
 
 
-def test_decide(fixture_snake):
-	"""
-	Tests if the correct decision is made by the neuralnetwork
-	"""
-
-	fixture_snake.neural_network = neuralnet.neuralnet([3, 3])
-	fixture_snake.neural_network.weights[0] = np.eye(3)
-
-	for j in range(3):
-
-		fixture_snake.status = np.zeros(3)
-		fixture_snake.status[j] = 1
-
-		for i in range(len(fixture_snake._directions)):
-
-			fixture_snake._direction = fixture_snake._directions[i]
-			fixture_snake._decide()
-
-			assert fixture_snake._direction == fixture_snake._directions[(i+j-1)%4]
-
-
 def test_has_eaten_himself(fixture_snake):
 
 	fixture_snake.position = np.array([0, 0])
