@@ -1,5 +1,5 @@
-from fixtures.fixture_shape import *
-from fixtures.fixture_neural_network import *
+import numpy as np
+from fixtures import fixture_shape, fixture_neural_network
 
 def test_init_neural_network(fixture_shape, fixture_neural_network):
 	"""

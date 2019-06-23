@@ -1,7 +1,7 @@
-from fixtures.fixture_neural_network import *
-from fixtures.fixture_shape import *
+import numpy as np
 import genetic_algorithm as ga
-from snake import *
+import snake
+from fixtures import fixture_shape, fixture_neural_network, fixture_neural_network2
 
 def test_neuralnet_crossover(fixture_neural_network, fixture_neural_network2):
 	"""
@@ -30,7 +30,7 @@ def test_sort_generation():
 	test_gen = []
 
 	for i in range(10):
-		test_gen.append(snake())
+		test_gen.append(snake.snake())
 		test_gen[-1].fitness = np.random.randint(0, 10)
 
 	test_gen = ga.sort_generation(test_gen)
@@ -42,12 +42,12 @@ def test_create_generation(fixture_neural_network):
 	test_gen = []
 
 	for i in range(10):
-		test_gen.append(snake((fixture_neural_network)))
+		test_gen.append(snake.snake((fixture_neural_network)))
 		test_gen[-1].fitness = np.random.randint(0, 10)
 
 	new_gen = ga.create_generation(test_gen)
 
 	for sn in new_gen:
-		assert isinstance(sn, snake)
+		assert isinstance(sn, snake.snake)
 		assert len(test_gen) == len(new_gen)
 		assert sn.neural_network.shape == fixture_neural_network.shape

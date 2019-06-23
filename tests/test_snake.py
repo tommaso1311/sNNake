@@ -1,7 +1,6 @@
-from fixtures.fixture_snake import *
-from fixtures.fixture_food import *
-from fixtures.fixture_size import *
-from fixtures.fixture_shape import *
+import numpy as np
+import neuralnet
+from fixtures import fixture_size, fixture_shape, fixture_food, fixture_snake
 
 
 def test_init_snake(fixture_snake):
@@ -87,7 +86,7 @@ def test_decide(fixture_snake):
 	Tests if the correct decision is made by the neuralnetwork
 	"""
 
-	fixture_snake.neural_network = neuralnet([3, 3])
+	fixture_snake.neural_network = neuralnet.neuralnet([3, 3])
 	fixture_snake.neural_network.weights[0] = np.eye(3)
 
 	for j in range(3):

@@ -1,5 +1,6 @@
-from fixtures.fixture_size import *
-from fixtures.fixture_game import *
+import numpy as np
+import pytest
+from fixtures import fixture_game, fixture_size
 
 @pytest.mark.xfail(reason="video system not initialized")
 def test_init_window(fixture_size, fixture_game):
