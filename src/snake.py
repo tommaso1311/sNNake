@@ -162,35 +162,7 @@ class snake:
 			return True
 
 
-	def has_eaten_himself(self):
-
-		if any((self.position == x).all() for x in self.occupied[1:]):
-			return True
-		else:
-			return False
-
-
-	def has_exited(self, size):
-		"""
-		Parameters
-		----------
-		size : number
-			size of the game window
-		"""
-
-		if not (0<=self.position[0]<size and 0<=self.position[1]<size):
-			return True
-		else:
-			return False
-
-
-	def dies(self):
-
-		self.fitness -= 1
-		self.is_alive = False
-
-
-def _get_status(self, game_size, food_obj):
+	def _get_status(self, game_size, food_obj):
 		"""
 		Parameters
 		----------
@@ -254,3 +226,31 @@ def _get_status(self, game_size, food_obj):
 			self._direction = self._directions[(direction_index-1) % 4]
 		elif max_index == 2:
 			self._direction = self._directions[(direction_index+1) % 4]
+
+
+	def has_eaten_himself(self):
+
+		if any((self.position == x).all() for x in self.occupied[1:]):
+			return True
+		else:
+			return False
+
+
+	def has_exited(self, size):
+		"""
+		Parameters
+		----------
+		size : number
+			size of the game window
+		"""
+
+		if not (0<=self.position[0]<size and 0<=self.position[1]<size):
+			return True
+		else:
+			return False
+
+
+	def dies(self):
+
+		self.fitness -= 1
+		self.is_alive = False
