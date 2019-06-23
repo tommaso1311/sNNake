@@ -14,17 +14,17 @@ class game:
 		a list of integers used to represent the game window
 	view : bool
 		if True represent the game
-	step : int
+	_step : int
 		current duration of the game
-	duration : float
+	_duration : float
 		max duration of the game
-	background_color : tuple
+	_background_color : tuple
 		describes the background color of the game window
-	snake_color : tuple
+	_snake_color : tuple
 		describes the snake color in the game window
-	food_color : tuple
+	_food_color : tuple
 		describes the food color in the game window
-	clock : pygame.time object
+	_clock : pygame.time object
 		used to control the refresh of the game window
 	window : pygame.display object
 		used to represent the game
@@ -53,7 +53,7 @@ class game:
 			the number of squares in the game field
 		view : bool
 			if True represent the game
-		duration : float
+		_duration : float
 			max duration of the game
 		"""
 
@@ -63,12 +63,12 @@ class game:
 
 		self.size = int(size)
 		self.view = view
-		self.step = 0
-		self.duration = duration
-		self.background_color = (202, 202, 202)
-		self.snake_color = (66, 149, 71)
-		self.food_color = (183, 43, 56)
-		self.clock = pygame.time.Clock()
+		self._step = 0
+		self._duration = duration
+		self._background_color = (202, 202, 202)
+		self._snake_color = (66, 149, 71)
+		self._food_color = (183, 43, 56)
+		self._clock = pygame.time.Clock()
 
 		if self.view:
 			self.window = pygame.display.set_mode((self.size*20,
@@ -120,22 +120,22 @@ class game:
 
 		assert isinstance(frequency, (int, float)), "Expected an int or a float, received a " + type(frequency).__name__
 
-		self.window.fill(self.background_color)
+		self.window.fill(self._background_color)
 
 		# drawing food
-		pygame.draw.rect(self.window, self.food_color,
+		pygame.draw.rect(self.window, self._food_color,
 			pygame.Rect(self.food.position[1]*20, self.food.position[0]*20,
 				20, 20))
 
 		# drawing snake
 		for coord in self.snake.occupied:
-			pygame.draw.rect(self.window, self.snake_color,
+			pygame.draw.rect(self.window, self._snake_color,
 				pygame.Rect(coord[1]*20, coord[0]*20,
 					20, 20))
 
 		pygame.display.flip()
 
-		self.clock.tick(frequency)
+		self._clock.tick(frequency)
 
 
 	def end(self):
@@ -152,7 +152,7 @@ class game:
 			self.snake.is_alive = False
 
 		# checks if the game has ended for reaching max duration
-		if self.step < self.duration:
-			self.step += 1
+		if self._step < self._duration:
+			self._step += 1
 		else:
 			self.snake.is_alive = False
