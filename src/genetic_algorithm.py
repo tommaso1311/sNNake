@@ -19,11 +19,16 @@ def neural_network_crossover(neural_network_a, neural_network_b, crossover_prob=
 		probability of mutation
 	"""
 
-	assert isinstance(neural_network_a, neuralnet.neuralnet), "Expected a neuralnet, received a " + type(neural_network_a).__name__
-	assert isinstance(neural_network_b, neuralnet.neuralnet), "Expected a neuralnet, received a " + type(neural_network_b).__name__
-	assert neural_network_a.shape == neural_network_b.shape, "Neural networks don't have the same shape"
-	assert 1 >= crossover_prob >= 0, "Wrong crossover probability value: not between 0 and 1"
-	assert 1 >= mutation_prob >= 0, "Wrong mutation probability value: not between 0 and 1"
+	if not isinstance(neural_network_a, neuralnet.neuralnet):
+		raise TypeError("Expected a neuralnet, received a " + type(neural_network_a).__name__)
+	if not isinstance(neural_network_b, neuralnet.neuralnet):
+		raise TypeError("Expected a neuralnet, received a " + type(neural_network_b).__name__)
+	if not neural_network_a.shape == neural_network_b.shape:
+		raise ValueError("Neural networks don't have the same shape")
+	if not 1 >= crossover_prob >= 0:
+		raise ValueError("Wrong crossover probability value: not between 0 and 1")
+	if not 1 >= mutation_prob >= 0:
+		raise ValueError("Wrong mutation probability value: not between 0 and 1")
 
 	weights = []
 
@@ -66,9 +71,11 @@ def sort_generation(generation):
 	Sorts the generation by fitness in decreasing order
 	"""
 
-	assert isinstance(generation, list), "Expected a list, received a " + type(generation).__name__
-	for element in generation:
-		assert isinstance(element, snake.snake), "Expected a snake, received a " + type(element).__name__
+	if not isinstance(generation, list):
+		raise TypeError("Expected a list, received a " + type(generation).__name__)
+	for sn in generation:
+		if not isinstance(sn, snake.snake):
+			raise TypeError("Expected a snake, received a " + type(sn).__name__)
 
 	generation.sort(key=lambda snake: snake.fitness, reverse=True)
 
@@ -79,12 +86,17 @@ def create_generation(generation, snakes=10, nn=[], q=0.05, crossover_prob=0.95,
 	"""
 	Creates a new generation out of the previous one
 	"""
-	assert 1 >= crossover_prob >= 0, "Wrong crossover probability value: not between 0 and 1"
-	assert 1 >= mutation_prob >= 0, "Wrong mutation probability value: not between 0 and 1"
-	assert 1 >= q >= 0, "Wrong choose element probability value: not between 0 and 1"
-	assert isinstance(generation, list), "Expected a list, received a " + type(generation).__name__
-	for element in generation:
-		assert isinstance(element, snake.snake), "Expected a snake, received a " + type(element).__name__
+	if not 1 >= crossover_prob >= 0:
+		raise ValueError("Wrong crossover probability value: not between 0 and 1")
+	if not 1 >= mutation_prob >= 0:
+		raise ValueError("Wrong mutation probability value: not between 0 and 1")
+	if not 1 >= q >= 0:
+		raise ValueError("Wrong choose element probability value: not between 0 and 1")
+	if not isinstance(generation, list):
+		raise TypeError("Expected a list, received a " + type(generation).__name__)
+	for sn in generation:
+		if not isinstance(sn, snake.snake):
+			raise TypeError("Expected a snake, received a " + type(sn).__name__)
 
 	if not generation:
 

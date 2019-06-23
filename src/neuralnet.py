@@ -37,11 +37,16 @@ class neuralnet:
 			list of neural weights between each layer
 		"""
 
-		assert isinstance(shape, list), "Expected a list, received a " + type(shape).__name__
+		if not isinstance(shape, list):
+			raise TypeError("Expected a list, received a " + type(shape).__name__)
+
 		for e in shape:
-			assert isinstance(e, int), "Expected an int, received a " + type(e).__name__
-		assert len(shape) >= 2, "Incorrect shape lenght (must be at least 2)"
-		assert isinstance(new, bool), "Expected a bool, received a " + type(new).__name__
+			if not isinstance(e, int):
+				raise TypeError("Expected an int, received a " + type(e).__name__)
+		if not len(shape) >= 2:
+			raise ValueError("Incorrect shape lenght (must be at least 2)")
+		if not isinstance(new, bool):
+			raise TypeError("Expected a bool, received a " + type(new).__name__)
 
 		self.shape = shape
 		self.weights = []
@@ -49,13 +54,16 @@ class neuralnet:
 		if new:
 			self.weights = self.weights_creator()
 		else:
-			assert isinstance(weights, list), "Expected a list, received a " + type(weights).__name__
-			assert len(weights) == len(shape)-1, "Incorrect weights length"
+			if not isinstance(weights, list):
+				raise TypeError("Expected a list, received a " + type(weights).__name__)
+			if not len(weights) == len(shape)-1:
+				raise TypeError("Incorrect weights length")
 			for element in weights:
-				assert isinstance(element, np.ndarray), "Expected a np.ndarray, received a " + type(element).__name__
+				if not isinstance(element, np.ndarray):
+					raise TypeError("Expected a np.ndarray, received a " + type(element).__name__)
 			for i in range(len(shape)-1):
-				assert weights[i].shape == (shape[i+1], shape[i]), "Incorrect weights shape"
-
+				if not weights[i].shape == (shape[i+1], shape[i]):
+					raise ValueError("Incorrect weights shape")
 			self.weights = weights
 
 
@@ -79,8 +87,10 @@ class neuralnet:
 			array of input to feed to the neural network
 		"""
 
-		assert len(inputs.shape) == 1, "Incorrect input shape"
-		assert inputs.shape[0] == self.weights[0].shape[1], "Incorrect input or weights shape"
+		if not len(inputs.shape) == 1:
+			raise ValueError("Incorrect input shape")
+		if not inputs.shape[0] == self.weights[0].shape[1]:
+			raise ValueError("Incorrect input or weights shape")
 
 		outputs = self.weights.copy()
 		outputs.insert(0, inputs)

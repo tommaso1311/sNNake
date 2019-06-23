@@ -57,9 +57,12 @@ class game:
 			max duration of the game
 		"""
 
-		assert isinstance(size, (int, float)), "Expected an int or a float, received a " + type(size).__name__
-		assert isinstance(view, bool), "Expected a bool, received a " + type(view).__name__
-		assert isinstance(duration, (int, float)), "Expected a int or a float, received a " + type(duration).__name__
+		if not isinstance(size, (int, float)):
+			raise TypeError( "Expected an int or a float, received a " + type(size).__name__)
+		if not isinstance(size, (int, float)):
+			raise TypeError("Expected an int or a float, received a " + type(size).__name__)
+		if not isinstance(duration, (int, float)):
+			raise TypeError("Expected a int or a float, received a " + type(duration).__name__)
 
 		self.size = size
 		self._view = view
@@ -93,7 +96,8 @@ class game:
 		if ext_snake == None:
 			self.snake = snake.snake()
 		else:
-			assert isinstance(ext_snake, snake.snake), "Expected a snake, received a " + type(ext_snake).__name__
+			if not isinstance(ext_snake, snake.snake):
+				raise TypeError("Expected a snake, received a " + type(ext_snake).__name__)
 			self.snake = ext_snake
 
 		# initialize position
@@ -119,7 +123,8 @@ class game:
 			refreshes per second
 		"""
 
-		assert isinstance(frequency, (int, float)), "Expected an int or a float, received a " + type(frequency).__name__
+		if not isinstance(frequency, (int, float)):
+			raise TypeError("Expected an int or a float, received a " + type(frequency).__name__)
 
 		self._window.fill(self._background_color)
 

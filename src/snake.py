@@ -69,7 +69,8 @@ class snake:
 			if it is a neuralnet object, copies the neural network
 		"""
 
-		assert isinstance(human, bool), "Expected a bool, received a " + type(human).__name__
+		if not isinstance(human, bool):
+			raise TypeError("Expected a bool, received a " + type(human).__name__)
 
 		if neural_network == None:
 			self.neural_network = None
@@ -84,7 +85,7 @@ class snake:
 			self.neural_network = neuralnet.neuralnet(neural_network)
 			self._human = False
 		else:
-			raise ValueError(("Error: neural_network is neither a neuralnet object nor a tuple!"))
+			raise TypeError(("Error: neural_network is neither a neuralnet object nor a tuple!"))
 
 
 		self.length = 1
@@ -126,8 +127,10 @@ class snake:
 
 		elif self.neural_network != None:
 
-			assert isinstance(game_size, int), "Expected an int, received a " + type(game_size).__name__
-			assert isinstance(food_obj, food.food), "Expected a food objects, received a " + type(food_obj).__name__
+			if not isinstance(game_size, int):
+				raise TypeError("Expected an int, received a " + type(game_size).__name__)
+			if not isinstance(food_obj, food.food):
+				raise TypeError("Expected a food objects, received a " + type(food_obj).__name__)
 
 			self._get_status(game_size, food_obj)
 			self._decide()
@@ -151,7 +154,8 @@ class snake:
 		food : food object
 		"""
 
-		assert isinstance(food_obj, food.food), "Expected a food objects, received a " + type(food_obj).__name__
+		if not isinstance(food_obj, food.food):
+			raise TypeError("Expected a food objects, received a " + type(food_obj).__name__)
 
 		# update length and fitness if food is eaten
 		if (self.position == food_obj.position).all():
@@ -170,9 +174,11 @@ class snake:
 		food_obj : food object
 		"""
 
-		assert isinstance(game_size, int), "Expected an int, received a " + type(game_size).__name__
-		assert isinstance(food_obj, food.food), "Expected a food objects, received a " + type(food_obj).__name__
-
+		if not isinstance(game_size, int):
+			raise TypeError("Expected an int, received a " + type(game_size).__name__)
+		if not isinstance(food_obj, food.food):
+			raise TypeError("Expected a food objects, received a " + type(food_obj).__name__)
+				
 		self.status = np.zeros(5)
 
 		# creating a vector with distances from boundaries

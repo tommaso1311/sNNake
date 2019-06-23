@@ -80,7 +80,8 @@ def main():
 
 			print()
 			generations = input("Insert number of generations to train: ")
-			assert generations.isdigit()
+			if not generations.isdigit():
+				raise TypeError("Expected a digit, received a " + type(generations).__name__)
 			generations = int(generations)
 
 			best_generation, details = utils.train(generation, details, generations=generations,
