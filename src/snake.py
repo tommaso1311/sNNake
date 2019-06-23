@@ -101,7 +101,8 @@ class snake:
 
 			self._get_status(game_size, food_obj)
 		
-		self._direction = self.neural_network.decide(self._direction, self.status)
+		if self.neural_network != None:
+			self._direction = self.neural_network.decide(self._direction, self.status)
 
 
 		# upgrade the position
