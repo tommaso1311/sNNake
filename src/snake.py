@@ -226,12 +226,16 @@ class snake:
 
 		if any((self.position == x).all() for x in self.occupied[1:]):
 			return True
+		else:
+			return False
 
 
 	def has_exited(self, size):
 
 		if not (0<=self.position[0]<size and 0<=self.position[1]<size):
 			return True
+		else:
+			return False
 
 
 	def dies(self):

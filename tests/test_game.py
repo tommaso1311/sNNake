@@ -8,11 +8,11 @@ def test_init_window(fixture_size, fixture_game):
 	Tests correct game window size
 	"""
 
-	assert fixture_game.window.get_size()[0] == fixture_size*20
-	assert fixture_game.window.get_size()[1] == fixture_size*20
+	assert fixture_game._window.get_size()[0] == fixture_size*20
+	assert fixture_game._window.get_size()[1] == fixture_size*20
 
 @pytest.mark.xfail(reason="video system not initialized")
-def test_end(fixture_game):
+def test_is_over(fixture_game):
 	"""
 	Tests correct end game condition
 	"""
@@ -23,13 +23,13 @@ def test_end(fixture_game):
 	fixture_game.add_snake()
 
 	fixture_game.snake.position = np.array([0, 0])
-	fixture_game.end()
+	fixture_game._is_over()
 
 	assert fixture_game.snake.is_alive
 
-	fixture_game.snake.occupied.insert(1, [0, 0])
+	fixture_game.snake.occupied.insert(1, np.array([0, 0]))
 	fixture_game.snake.position = np.array([0, 0])
-	fixture_game.end()
+	fixture_game._is_over()
 
 	assert not fixture_game.snake.is_alive
 
@@ -37,7 +37,7 @@ def test_end(fixture_game):
 
 		fixture_game.snake.is_alive = True
 		fixture_game.snake.position = pos
-		fixture_game.end()
+		fixture_game._is_over()
 		
 		assert not fixture_game.snake.is_alive
 

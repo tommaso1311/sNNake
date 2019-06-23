@@ -71,7 +71,7 @@ class game:
 		self._clock = pygame.time.Clock()
 
 		if self._view:
-			self.window = pygame.display.set_mode((self.size*20,
+			self._window = pygame.display.set_mode((self.size*20,
 											self.size*20))
 
 
@@ -81,9 +81,9 @@ class game:
 
 		while self.snake.is_alive and self.snake.eat_not(self.food):
 
-			self.end()
+			self._is_over()
 			self.snake.move(self.size, self.food)
-			
+
 			if self._view:
 				self._represent()
 
@@ -124,13 +124,13 @@ class game:
 		self.window.fill(self._background_color)
 
 		# drawing food
-		pygame.draw.rect(self.window, self._food_color,
+		pygame.draw.rect(self._window, self._food_color,
 			pygame.Rect(self.food.position[1]*20, self.food.position[0]*20,
 				20, 20))
 
 		# drawing snake
 		for coord in self.snake.occupied:
-			pygame.draw.rect(self.window, self._snake_color,
+			pygame.draw.rect(self._window, self._snake_color,
 				pygame.Rect(coord[1]*20, coord[0]*20,
 					20, 20))
 
@@ -139,7 +139,7 @@ class game:
 		self._clock.tick(frequency)
 
 
-	def end(self):
+	def _is_over(self):
 
 		# checks if the snake is still in the field
 		if self.snake.has_exited(self.size):

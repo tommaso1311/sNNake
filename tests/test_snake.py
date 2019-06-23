@@ -100,3 +100,24 @@ def test_decide(fixture_snake):
 			fixture_snake.decide()
 
 			assert fixture_snake.direction == fixture_snake.directions[(i+j-1)%4]
+
+
+def test_has_eaten_himself(fixture_snake):
+
+	fixture_snake.position = np.array([0, 0])
+	fixture_snake.occupied.append(fixture_snake.position)
+	fixture_snake.occupied.insert(1, np.array([0, 0]))
+
+	assert fixture_snake.has_eaten_himself()
+
+
+def test_has_exited(fixture_snake, fixture_size):
+
+	positions = [np.array([-1, 0]), np.array([0, -1]),
+		np.array([fixture_size+1, 0]), np.array([0, fixture_size+1])]
+
+	for pos in positions:
+
+		fixture_snake.position = pos
+		
+		assert fixture_snake.has_exited(fixture_size)
