@@ -220,3 +220,15 @@ class snake:
 			self.direction = self.directions[(direction_index-1) % 4]
 		elif max_index == 2:
 			self.direction = self.directions[(direction_index+1) % 4]
+
+
+	def has_eaten_himself(self):
+
+		if any((self.position == x).all() for x in self.occupied[1:]):
+			return True
+
+
+	def has_exited(self, size):
+
+		if not (0<=self.position[0]<size and 0<=self.position[1]<size):
+			return True

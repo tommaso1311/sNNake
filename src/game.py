@@ -141,13 +141,12 @@ class game:
 	def end(self):
 
 		# checks if the snake is still in the field
-		if not (0 <= self.snake.position[0] < self.size and
-			0 <= self.snake.position[1] < self.size):
+		if self.snake.has_exited(self.size):
 			self.snake.fitness -= 1
 			self.snake.is_alive = False
 
 		# checks if the snake has eaten itself
-		if any((self.snake.position == x).all() for x in self.snake.occupied[1:]):
+		if self.snake.has_eaten_himself():
 			self.snake.fitness -= 1
 			self.snake.is_alive = False
 
