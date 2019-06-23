@@ -10,9 +10,9 @@ class game:
 
 	Attributes
 	----------
-	size : list
-		a list of integers used to represent the game window
-	view : bool
+	size : int
+		size of the game (in squares)
+	_view : bool
 		if True represent the game
 	_step : int
 		current duration of the game
@@ -35,9 +35,9 @@ class game:
 		runs the game
 	add_snake()
 		creates a new snake
-	add_food()
+	_add_food()
 		creates new food
-	represent(frequency=30)
+	_represent(frequency=30)
 		depicts the game window
 	end()
 		checks if the snake is still in the field or if it has
@@ -53,7 +53,7 @@ class game:
 			the number of squares in the game field
 		view : bool
 			if True represent the game
-		_duration : float
+		duration : float
 			max duration of the game
 		"""
 
@@ -61,8 +61,8 @@ class game:
 		assert isinstance(view, bool), "Expected a bool, received a " + type(view).__name__
 		assert isinstance(duration, (int, float)), "Expected a int or a float, received a " + type(duration).__name__
 
-		self.size = int(size)
-		self.view = view
+		self.size = size
+		self._view = view
 		self._step = 0
 		self._duration = duration
 		self._background_color = (202, 202, 202)
@@ -70,21 +70,21 @@ class game:
 		self._food_color = (183, 43, 56)
 		self._clock = pygame.time.Clock()
 
-		if self.view:
+		if self._view:
 			self.window = pygame.display.set_mode((self.size*20,
 											self.size*20))
 
 
 	def play(self):
 
-		self.add_food()
+		self._add_food()
 
 		while self.snake.is_alive and self.snake.eat_not(self.food):
 
 			self.snake.move(self.size, self.food)
 			self.end()
-			if self.view:
-				self.represent()
+			if self._view:
+				self._represent()
 
 
 	def add_snake(self, ext_snake=None):
@@ -100,17 +100,17 @@ class game:
 		self.snake.occupied.insert(0, self.snake.position.copy())
 
 
-	def add_food(self):
+	def _add_food(self):
 
 		self.food = food.food()
 
 		# initialize position and check to not create new food in snake
 		self.food.position = np.random.randint(0, self.size, 2)
 		while any((self.food.position == x).all() for x in self.snake.position):
-			self.add_food()
+			self._add_food()
 
 
-	def represent(self, frequency=24):
+	def _represent(self, frequency=24):
 		"""
 		Parameters
 		----------
