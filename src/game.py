@@ -81,8 +81,9 @@ class game:
 
 		while self.snake.is_alive and self.snake.eat_not(self.food):
 
-			self.snake.move(self.size, self.food)
 			self.end()
+			self.snake.move(self.size, self.food)
+			
 			if self._view:
 				self._represent()
 
@@ -142,16 +143,14 @@ class game:
 
 		# checks if the snake is still in the field
 		if self.snake.has_exited(self.size):
-			self.snake.fitness -= 1
-			self.snake.is_alive = False
+			self.snake.dies()
 
 		# checks if the snake has eaten itself
 		if self.snake.has_eaten_himself():
-			self.snake.fitness -= 1
-			self.snake.is_alive = False
+			self.snake.dies()
 
 		# checks if the game has ended for reaching max duration
-		if self._step < self._duration:
-			self._step += 1
+		if self._step >= self._duration:
+			self.snake.dies()
 		else:
-			self.snake.is_alive = False
+			self._step += 1

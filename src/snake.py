@@ -232,3 +232,9 @@ class snake:
 
 		if not (0<=self.position[0]<size and 0<=self.position[1]<size):
 			return True
+
+
+	def dies(self):
+
+		self.fitness -= 1
+		self.is_alive = False
