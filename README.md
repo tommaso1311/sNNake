@@ -4,7 +4,7 @@ Evolving **neural networks** using **genetic algorithm**.
 
 ## Build and Libraries
 
-<table>
+<table align="center">
 <tr>
 <td style="text-align:center"><b>master</td>
 <td><img src="https://circleci.com/gh/tommaso1311/sNNake.svg?style=svg"/></td>
@@ -17,7 +17,7 @@ Evolving **neural networks** using **genetic algorithm**.
 
 &NewLine;
 
-<div>
+<div align="center">
 <img src="https://docs.pytest.org/en/latest/_static/pytest1.png" height=75/>
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/NumPy_logo.svg/1280px-NumPy_logo.svg.png" height=75/>
 <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Pygame_logo.gif" height=75/>
@@ -33,7 +33,7 @@ The project consists in creating the popular game **snake** and adding a **neura
 
 The game is the simple snake, in which a snake has to move in a restricted space, trying to eat as much food as possible without eating himself or exiting the field. The snake can see in three directions (left, front, and right) and knows the distance from the food and the angle between the direction of its movement and the direction of the food.
 
-<div style="text-align:center">
+<div align="center">
 <img src=".imgs/ambient.png" height=200/>
 </div>
 
@@ -43,7 +43,7 @@ This information is passed to a neural network, which then decides if it is nece
 
 A neural network is a mathematical-computational model which is composed of various layers of sub-elements called _perceptrons_. Each of these perceptrons computes a non-linear weighted sum of inputs and returns an output which can be connected to the following layer.
 
-<div style="text-align:center">
+<div align="center">
 <img src=".imgs/perceptron0.png" height=125/>
 <img src=".imgs/ann.png" height=125/>
 </div>
@@ -54,13 +54,13 @@ In the project, a list of neural networks are initialized with random weights in
 
 The genetic algorithm is an optimization technique based upon the idea of biological evolution. Starting from a population of individuals with random characteristics (in this case the weights of the neural network), a _fitness_ function (the amount of food eaten) is determined for each individual, and those with a higher score are more likely to reproduce.
 
-<div style="text-align:center">
+<div align="center">
 <img src=".imgs/selection.png" height=250/>
 </div>
 
 From two selected individuals, a combination of their characteristics is obtained through _crossover_ and _mutation_ processes. The first  one simply swap the weights of the two networks while the second randomly changes only one weight.
 
-<div style="text-align:center">
+<div align="center">
 <img src=".imgs/crossover.png" height=110/>
 <img src=".imgs/mutation.png" height=100/>
 </div>
