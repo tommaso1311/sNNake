@@ -2,12 +2,6 @@
 
 Evolving **neural networks** using **genetic algorithm**.
 
-## Description
-
-**sNNake** is the final exam project I wrote for the course of Data Analysis for Applied Physics and corrected and improved for the course Software and Computing for Applied Physics.
-
-The project consists in creating the popular game snake and adding a neural network to play it. This network is then evolved using a genetic algorithm to play better at each iteration.
-
 ## Build and Libraries
 
 <table>
@@ -29,6 +23,47 @@ The project consists in creating the popular game snake and adding a neural netw
 <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Pygame_logo.gif" height=75/>
 </div>
 
+## Description
+
+**sNNake** is the final exam project I wrote for the course of Data Analysis for Applied Physics and corrected and improved for the course Software and Computing for Applied Physics.
+
+The project consists in creating the popular game **snake** and adding a **neural network** to play it. This network is then evolved using a **genetic algorithm** to play better at each iteration.
+
+#### Snake
+
+The game is the simple snake, in which a snake has to move in a restricted space, trying to eat as much food as possible without eating himself or exiting the field. The snake can see in three directions (left, front, and right) and knows the distance from the food and the angle between the direction of its movement and the direction of the food.
+
+<div style="text-align:center">
+<img src=".imgs/ambient.png" height=200/>
+</div>
+
+This information is passed to a neural network, which then decides if it is necessary to change direction (to avoid collision with walls or the body) or to continue in that direction.
+
+#### Neural network
+
+A neural network is a mathematical-computational model which is composed of various layers of sub-elements called _perceptrons_. Each of these perceptrons computes a non-linear weighted sum of inputs and returns an output which can be connected to the following layer.
+
+<div style="text-align:center">
+<img src=".imgs/perceptron0.png" height=125/>
+<img src=".imgs/ann.png" height=125/>
+</div>
+
+In the project, a list of neural networks are initialized with random weights in interval [-1, 1] and then their performance is measured by making them play the game. The list is then evolved using the genetic algorithm to achieve better results.
+
+#### Genetic Algorithm
+
+The genetic algorithm is an optimization technique based upon the idea of biological evolution. Starting from a population of individuals with random characteristics (in this case the weights of the neural network), a _fitness_ function (the amount of food eaten) is determined for each individual, and those with a higher score are more likely to reproduce.
+
+<div style="text-align:center">
+<img src=".imgs/selection.png" height=250/>
+</div>
+
+From two selected individuals, a combination of their characteristics is obtained through _crossover_ and _mutation_ processes. The first  one simply swap the weights of the two networks while the second randomly changes only one weight.
+
+<div style="text-align:center">
+<img src=".imgs/crossover.png" height=110/>
+<img src=".imgs/mutation.png" height=100/>
+</div>
 
 ## Installation
 Since the project is not a package, the only way to install it is by download or cloning it, via the proper button or the command line (if **git** is installed):
