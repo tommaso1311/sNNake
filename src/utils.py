@@ -1,8 +1,11 @@
 import pickle
 import os
 import sys
-from genetic_algorithm import *
-from game import *
+import genetic_algorithm as ga
+import game
+import pygame
+import numpy as np
+import snake
 
 
 def save(generation, details, filename="generation"):
@@ -11,10 +14,15 @@ def save(generation, details, filename="generation"):
 	already exists (also asks for a new name before exiting)
 	"""
 
-	assert isinstance(filename, str), "Expected a string, received a " + type(filename).__name__
+	if not isinstance(filename, str):
+		raise TypeError("Expected a string, received a " + type(filename).__name__)
+
 	for sn in generation:
-		assert isinstance(sn, snake), "Expected a snake, received a " + type(snake).__name__
-	assert isinstance(details, dict), "Expected a dictionary, received a " + type(details).__name__
+		if not isinstance(sn, snake.snake):
+			raise TypeError("Expected a snake, received a " + type(sn).__name__)
+
+	if not isinstance(details, dict):
+		raise TypeError("Expected a dictionary, received a " + type(details).__name__)
 
 	# setting path filename and checking if it already exists
 
@@ -45,7 +53,8 @@ def load(filename="generation"):
 	Loads a snakes generation
 	"""
 
-	assert isinstance(filename, str), "Expected a string, received a " + type(filename).__name__
+	if not isinstance(filename, str):
+		raise TypeError("Expected a string, received a " + type(filename).__name__)
 
 	# setting path filename and checking if it already exists
 	path_filename = "models/" + filename
@@ -57,7 +66,8 @@ def load(filename="generation"):
 			details = pickle.load(f)
 
 		for sn in generation:
-			assert isinstance(sn, snake)
+			if not isinstance(sn, snake.snake):
+				raise TypeError("Expected a snake, received a " + type(sn).__name__)
 			sn.is_alive = True
 			sn.length = 1
 			sn.occupied = []
@@ -75,7 +85,8 @@ def get_yes_no(question):
 	Used to get a yes or no answer
 	"""
 
-	assert isinstance(question, str), "Expected a string, received a " + type(question).__name__
+	if not isinstance(question, str):
+		raise TypeError("Expected a string, received a " + type(question).__name__)
 
 	yes = {"yes", "y", "ye"}
 	no = {"no", "n"}
@@ -99,14 +110,22 @@ def train(generation=[], details={}, snakes=10, shape=[], generations=1,
 	Used to train the model
 	"""
 
-	assert isinstance(generation, list), "Expected a list, received a " + type(generation).__name__
-	assert isinstance(details, dict), "Expected a dict, received a " + type(details).__name__
-	assert isinstance(snakes, int), "Expected an int, received a " + type(snakes).__name__
-	assert isinstance(shape, list), "Expected a string, received a " + type(shape).__name__
-	assert isinstance(generations, int), "Expected an int, received a " + type(generations).__name__
-	assert isinstance(size, int), "Expected an int, received a " + type(size).__name__
-	assert isinstance(view, bool), "Expected a bool, received a " + type(view).__name__
-	assert isinstance(end, int), "Expected an int, received a " + type(end).__name__
+	if not isinstance(generation, list):
+		raise TypeError("Expected a list, received a " + type(generation).__name__)
+	if not isinstance(details, dict):
+		raise TypeError("Expected a dict, received a " + type(details).__name__)
+	if not isinstance(snakes, int):
+		raise TypeError("Expected an int, received a " + type(snakes).__name__)
+	if not isinstance(shape, list):
+		raise TypeError("Expected a string, received a " + type(shape).__name__)
+	if not isinstance(generations, int):
+		raise TypeError("Expected an int, received a " + type(generations).__name__)
+	if not isinstance(size, int):
+		raise TypeError("Expected an int, received a " + type(size).__name__)
+	if not isinstance(view, bool):
+		raise TypeError("Expected a bool, received a " + type(view).__name__)
+	if not isinstance(end, int):
+		raise TypeError("Expected an int, received a " + type(end).__name__)
 
 	# initializing best results
 	best_generation = []
@@ -115,12 +134,13 @@ def train(generation=[], details={}, snakes=10, shape=[], generations=1,
 
 	if not generation:
 
-		generation = create_generation(generation, snakes, shape)
+		generation = ga.create_generation(generation, snakes, shape)
 
 	else:
 
-		for e in generation:
-			assert isinstance(e, snake), "Expected a snake, received a " + type(e).__name__
+		for sn in generation:
+			if not isinstance(sn, snake.snake):
+				raise TypeError("Expected a snake, received a " + type(sn).__name__)
 
 		snakes = len(generation)
 		size = details["game_size"]
@@ -129,11 +149,11 @@ def train(generation=[], details={}, snakes=10, shape=[], generations=1,
 	# running the train simulation
 	for gen in range(generations):
 
-		generation = create_generation(generation)
+		generation = ga.create_generation(generation)
 
 		for sn in generation:
 
-			g = game(size, view, end)
+			g = game.game(size, view, end)
 			g.add_snake(sn)
 
 			while g.snake.is_alive:
@@ -145,14 +165,14 @@ def train(generation=[], details={}, snakes=10, shape=[], generations=1,
 		print("generation", gen+1, "/", generations, ":", result)
 
 		# updating best results
-		if result > best_result:
+		if result >= best_result:
 			best_generation = generation
 			best_result = result
 			best_index = gen
 
 	print("Saving generation", best_index+1, "with a result of", best_result, "...")
 
-	best_generation = sort_generation(best_generation)
+	best_generation = ga.sort_generation(best_generation)
 
 	if not bool(details):
 		details = {"trained": generations,

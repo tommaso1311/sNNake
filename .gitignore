@@ -7,3 +7,4 @@ tests/fixtures/__pycache__/
 *.pyc
 src/models/generation
 src/models/ciao
+TODO.md

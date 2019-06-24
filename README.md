@@ -2,16 +2,11 @@
 
 Evolving **neural networks** using **genetic algorithm**.
 
-## Description
-
-**sNNake** is the final exam project I wrote for the course of Data Analysis for Applied Physics and corrected and improved for the course Software and Computing for Applied Physics.
-
-The project consists in creating the popular game snake and adding a neural network to play it. This network is then evolved using a genetic algorithm to play better at each iteration.
-
 ## Build and Libraries
 
+<div align="center">
 <table>
-<tr>
+<tr >
 <td style="text-align:center"><b>master</td>
 <td><img src="https://circleci.com/gh/tommaso1311/sNNake.svg?style=svg"/></td>
 </tr>
@@ -20,15 +15,56 @@ The project consists in creating the popular game snake and adding a neural netw
 <td><img src="https://circleci.com/gh/tommaso1311/sNNake/tree/dev.svg?style=svg"/></td>
 </tr>
 </table>
+</div>
 
 &NewLine;
 
-<div>
+<div align="center">
 <img src="https://docs.pytest.org/en/latest/_static/pytest1.png" height=75/>
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/NumPy_logo.svg/1280px-NumPy_logo.svg.png" height=75/>
 <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Pygame_logo.gif" height=75/>
 </div>
 
+## Description
+
+**sNNake** is the final exam project I wrote for the course of Data Analysis for Applied Physics, and corrected and improved for the course Software and Computing for Applied Physics.
+
+The project consists in creating the popular game **snake** and adding a **neural network** to play it. This network is then evolved using a **genetic algorithm** to play better at each iteration.
+
+#### Snake
+
+The game is the simple Snake, in which a snake has to move in a restricted space, trying to eat as much food as possible without eating himself or exiting the field.
+
+<div align="center">
+<img src=".imgs/ambient.png" height=200/>
+</div>
+
+ In the project, the snake can see in three directions (left, front, and right) and knows the distance from the food and the angle between the direction of its movement and the direction of the food. This information is passed to a neural network, which then decides if it is necessary to change direction (to avoid collision with walls or the body) or to continue in that direction.
+
+#### Neural network
+
+A neural network is a mathematical-computational model which is composed of various layers of sub-elements called _perceptrons_. Each of these perceptrons computes a non-linear weighted sum of inputs and returns an output which can be connected to the following layer.
+
+<div align="center">
+<img src=".imgs/ann.png" height=150/>
+</div>
+
+In the project, a list of neural networks are initialized with random weights in interval [-1, 1] and then their performance is measured by making them play the game. The list is then evolved using the genetic algorithm to achieve better results.
+
+#### Genetic Algorithm
+
+The genetic algorithm is an optimization technique based upon the idea of biological evolution. Starting from a population of individuals with random characteristics (in this case the weights of the neural network), a _fitness_ function (the amount of food eaten) is determined for each individual, and those with a higher score are more likely to reproduce.
+
+<div align="center">
+<img src=".imgs/selection.png" height=250/>
+</div>
+
+From two selected individuals, a combination of their characteristics is obtained through _crossover_ and _mutation_ processes. The first  one simply swap the weights of the two networks while the second randomly changes only one weight.
+
+<div align="center">
+<img src=".imgs/crossover.png" height=110/>
+<img src=".imgs/mutation.png" height=100/>
+</div>
 
 ## Installation
 Since the project is not a package, the only way to install it is by download or cloning it, via the proper button or the command line (if **git** is installed):
@@ -71,3 +107,14 @@ and simply follow the instructions.
 If you want to load a specific model, simply use the flag -m as in the previous example:
 
 	python main.py --load -m "name_of_the_model"
+	
+## Results
+
+To find the best hyper-parameters combination, several tests were run with different neural network shapes and crossover probabilities. To measure model performance it was used the mean length over an entire generation.
+
+<div align="center">
+<img src=".imgs/meansnn.png" height=300/>
+<img src=".imgs/meansga.png" height=300/>
+</div>
+
+ At the end, satisfying results were obtained as the model correctly learns how to play the game through the generations .
