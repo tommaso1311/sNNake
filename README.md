@@ -20,7 +20,6 @@ Evolving **neural networks** using **genetic algorithm**.
 &NewLine;
 
 <div align="center">
-<img src="https://docs.pytest.org/en/latest/_static/pytest1.png" height=75/>
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/NumPy_logo.svg/1280px-NumPy_logo.svg.png" height=75/>
 <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Pygame_logo.gif" height=75/>
 </div>
